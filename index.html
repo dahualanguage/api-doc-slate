@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
         <meta
             name="description"
-            content="Documentation for the Kittn API"
+            content="Documentation for the Dahua API"
         >
     <title>大話 API Reference</title>
 
@@ -295,7 +295,7 @@
     </script>
   </head>
 
-  <body class="index" data-languages="[&quot;shell&quot;,&quot;ruby&quot;,&quot;python&quot;,&quot;javascript&quot;]">
+  <body class="index" data-languages="[&quot;graphql&quot;]">
     <a href="#" id="nav-button">
       <span>
         NAV
@@ -305,10 +305,7 @@
     <div class="toc-wrapper">
       <img src="images/logo-1e815a84.png" class="logo" alt="" />
         <div class="lang-selector">
-              <a href="#" data-language-name="shell">shell</a>
-              <a href="#" data-language-name="ruby">ruby</a>
-              <a href="#" data-language-name="python">python</a>
-              <a href="#" data-language-name="javascript">javascript</a>
+              <a href="#" data-language-name="graphql">graphql</a>
         </div>
         <div class="search">
           <input type="text" class="search" id="input-search" placeholder="Search">
@@ -317,21 +314,32 @@
       <ul id="toc" class="toc-list-h1">
           <li>
             <a href="#introduction" class="toc-h1 toc-link" data-title="Introduction">Introduction</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#dev-endpoint" class="toc-h2 toc-link" data-title="測試機(dev) endpoint:">測試機(dev) endpoint:</a>
+                  </li>
+                  <li>
+                    <a href="#prod-endpoint" class="toc-h2 toc-link" data-title="正式機(prod) endpoint:">正式機(prod) endpoint:</a>
+                  </li>
+              </ul>
           </li>
           <li>
             <a href="#authentication" class="toc-h1 toc-link" data-title="Authentication">Authentication</a>
           </li>
           <li>
-            <a href="#kittens" class="toc-h1 toc-link" data-title="Kittens">Kittens</a>
+            <a href="#exam" class="toc-h1 toc-link" data-title="Exam">Exam</a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#get-all-kittens" class="toc-h2 toc-link" data-title="Get All Kittens">Get All Kittens</a>
+                    <a href="#start-exam-mutation" class="toc-h2 toc-link" data-title="Start Exam - Mutation">Start Exam - Mutation</a>
                   </li>
                   <li>
-                    <a href="#get-a-specific-kitten" class="toc-h2 toc-link" data-title="Get a Specific Kitten">Get a Specific Kitten</a>
+                    <a href="#questions-query" class="toc-h2 toc-link" data-title="Questions - Query">Questions - Query</a>
                   </li>
                   <li>
-                    <a href="#delete-a-specific-kitten" class="toc-h2 toc-link" data-title="Delete a Specific Kitten">Delete a Specific Kitten</a>
+                    <a href="#answer-question-mutation" class="toc-h2 toc-link" data-title="Answer Question - Mutation">Answer Question - Mutation</a>
+                  </li>
+                  <li>
+                    <a href="#exams-query" class="toc-h2 toc-link" data-title="Exams - Query">Exams - Query</a>
                   </li>
               </ul>
           </li>
@@ -348,182 +356,393 @@
       <div class="dark-box"></div>
       <div class="content">
         <h1 id='introduction'>Introduction</h1>
-<p>Welcome to the Kittn API! You can use our API to access Kittn API endpoints, which can get information on various cats, kittens, and breeds in our database.</p>
-
-<p>We have language bindings in Shell, Ruby, Python, and JavaScript! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.</p>
-
-<p>This example API documentation page was created with <a href="https://github.com/slatedocs/slate">Slate</a>. Feel free to edit it and use it as a base for your own API&#39;s documentation.</p>
+<p>Dahua APIs，目前只有第一版本的考試 APIs，用來幫學生做分級測驗，預計未來會加上更多 APIs.</p>
+<h2 id='dev-endpoint'>測試機(dev) endpoint:</h2>
+<p><code>https://bmxybfldb5bjdickj2z5gtm2ui.appsync-api.ap-southeast-1.amazonaws.com/graphql</code></p>
+<h2 id='prod-endpoint'>正式機(prod) endpoint:</h2>
+<p><code>還沒架，預計明年初開始架</code> 😆</p>
 <h1 id='authentication'>Authentication</h1>
 <blockquote>
-<p>To authorize, use this code:</p>
+<p>To authorize, use below api key:</p>
 </blockquote>
-<div class="highlight"><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s1">'kittn'</span>
+<div class="highlight"><pre class="highlight graphql tab-graphql"><code><span class="p">{</span><span class="w">
+  </span><span class="err">"</span><span class="n">x</span><span class="err">-</span><span class="n">api</span><span class="err">-</span><span class="n">key</span><span class="err">":</span><span class="w"> </span><span class="err">"</span><span class="n">yourApiKey</span><span class="err">"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>Dahua GraphQL API 要求每一個 request 必須要有未過期的 API KEY.
+API KEY 每一年需要更新一次 (找 Wilson 拿 API KEY.)。</p>
 
-<span class="n">api</span> <span class="o">=</span> <span class="no">Kittn</span><span class="o">::</span><span class="no">APIClient</span><span class="p">.</span><span class="nf">authorize!</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">)</span>
-</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">kittn</span>
-
-<span class="n">api</span> <span class="o">=</span> <span class="n">kittn</span><span class="p">.</span><span class="n">authorize</span><span class="p">(</span><span class="s">'meowmeowmeow'</span><span class="p">)</span>
-</code></pre></div><div class="highlight"><pre class="highlight shell tab-shell"><code><span class="c"># With shell, you can just pass the correct header with each request</span>
-curl <span class="s2">"api_endpoint_here"</span> <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"Authorization: meowmeowmeow"</span>
-</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">kittn</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">"</span><span class="s2">kittn</span><span class="dl">"</span><span class="p">);</span>
-
-<span class="kd">let</span> <span class="nx">api</span> <span class="o">=</span> <span class="nx">kittn</span><span class="p">.</span><span class="nx">authorize</span><span class="p">(</span><span class="dl">"</span><span class="s2">meowmeowmeow</span><span class="dl">"</span><span class="p">);</span>
-</code></pre></div>
-<blockquote>
-<p>Make sure to replace <code>meowmeowmeow</code> with your API key.</p>
-</blockquote>
-
-<p>Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our <a href="http://example.com/developers">developer portal</a>.</p>
-
-<p>Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:</p>
-
-<p><code>Authorization: meowmeowmeow</code></p>
+<p><code>x-api-key: yourApiKey</code></p>
 
 <aside class="notice">
-You must replace <code>meowmeowmeow</code> with your personal API key.
+You must replace <code>yourApiKey</code> with your API key.
 </aside>
-<h1 id='kittens'>Kittens</h1><h2 id='get-all-kittens'>Get All Kittens</h2><div class="highlight"><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s1">'kittn'</span>
-
-<span class="n">api</span> <span class="o">=</span> <span class="no">Kittn</span><span class="o">::</span><span class="no">APIClient</span><span class="p">.</span><span class="nf">authorize!</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">)</span>
-<span class="n">api</span><span class="p">.</span><span class="nf">kittens</span><span class="p">.</span><span class="nf">get</span>
-</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">kittn</span>
-
-<span class="n">api</span> <span class="o">=</span> <span class="n">kittn</span><span class="p">.</span><span class="n">authorize</span><span class="p">(</span><span class="s">'meowmeowmeow'</span><span class="p">)</span>
-<span class="n">api</span><span class="p">.</span><span class="n">kittens</span><span class="p">.</span><span class="n">get</span><span class="p">()</span>
-</code></pre></div><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="s2">"http://example.com/api/kittens"</span> <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"Authorization: meowmeowmeow"</span>
-</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">kittn</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">"</span><span class="s2">kittn</span><span class="dl">"</span><span class="p">);</span>
-
-<span class="kd">let</span> <span class="nx">api</span> <span class="o">=</span> <span class="nx">kittn</span><span class="p">.</span><span class="nx">authorize</span><span class="p">(</span><span class="dl">"</span><span class="s2">meowmeowmeow</span><span class="dl">"</span><span class="p">);</span>
-<span class="kd">let</span> <span class="nx">kittens</span> <span class="o">=</span> <span class="nx">api</span><span class="p">.</span><span class="nx">kittens</span><span class="p">.</span><span class="kd">get</span><span class="p">();</span>
-</code></pre></div>
-<blockquote>
-<p>The above command returns JSON structured like this:</p>
-</blockquote>
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">[</span><span class="w">
-  </span><span class="p">{</span><span class="w">
-    </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Fluffums"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"breed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"calico"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"fluffiness"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"cuteness"</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="w">
-  </span><span class="p">},</span><span class="w">
-  </span><span class="p">{</span><span class="w">
-    </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Max"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"breed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"unknown"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"fluffiness"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"cuteness"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w">
+<h1 id='exam'>Exam</h1><h2 id='start-exam-mutation'>Start Exam - Mutation</h2><div class="highlight"><pre class="highlight graphql tab-graphql"><code><span class="k">mutation</span><span class="w"> </span><span class="n">startExam</span><span class="w"> </span><span class="p">{</span><span class="w">
+  </span><span class="n">startExam</span><span class="p">(</span><span class="n">accountId</span><span class="p">:</span><span class="w"> </span><span class="s2">"test-accountId"</span><span class="p">,</span><span class="w"> </span><span class="n">examType</span><span class="p">:</span><span class="w"> </span><span class="n">DETERMINE_LEVEL</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="n">error</span><span class="w">
+    </span><span class="n">message</span><span class="w">
+    </span><span class="n">exam</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="n">accountId</span><span class="w">
+      </span><span class="n">sk</span><span class="w">
+      </span><span class="n">startTime</span><span class="w">
+      </span><span class="n">nextQuestionNumber</span><span class="w">
+      </span><span class="n">nextQuestionId</span><span class="w">
+      </span><span class="n">status</span><span class="w">
+      </span><span class="n">type</span><span class="w">
+      </span><span class="n">remainingNumOfQuestion</span><span class="w">
+      </span><span class="n">totalNumOfQuestion</span><span class="w">
+      </span><span class="n">questionDetails</span><span class="w">
+      </span><span class="n">achievedLevel</span><span class="w">
+    </span><span class="p">}</span><span class="w">
   </span><span class="p">}</span><span class="w">
-</span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
 </span></code></pre></div>
-<p>This endpoint retrieves all kittens.</p>
-<h3 id='http-request'>HTTP Request</h3>
-<p><code>GET http://example.com/api/kittens</code></p>
-<h3 id='query-parameters'>Query Parameters</h3>
+<blockquote>
+<p>以上的 startExam mutation 會回傳以下 JSON:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"startExam"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"error"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"exam"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"accountId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"test-accountId"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"sk"</span><span class="p">:</span><span class="w"> </span><span class="s2">"exam:DETERMINE_LEVEL:ts:1698090652"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"startTime"</span><span class="p">:</span><span class="w"> </span><span class="mi">1698090652</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"nextQuestionNumber"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"nextQuestionId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"TOCFL1:HSK2:SA|1000000021"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"IN_PROGRESS"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"DETERMINE_LEVEL"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"remainingNumOfQuestion"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"totalNumOfQuestion"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"questionDetails"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"achievedLevel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"TOCFL1, HSK2"</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>startExam mutation 會開啟一個新的考試，一個學生可以有多個考試。
+開啟一個考試後，API 會回傳下一題的題目 ID(<code>nextQuestionId</code>)</p>
+
+<p>考試狀態(<code>status</code>) 有 3 種(<code>IN_PROGRESS</code>, <code>COMPLETED</code>, <code>CANCELED</code>)</p>
+
+<p>考試類型(<code>type</code>) 有 2 種(<code>DETERMINE_LEVEL</code>, <code>ESSAY</code>)</p>
+<h3 id='mutation-input-parameters'>Mutation Input Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
-<th>Default</th>
+<th>type</th>
 <th>Description</th>
 </tr>
 </thead><tbody>
 <tr>
-<td>include_cats</td>
-<td>false</td>
-<td>If set to true, the result will also include cats.</td>
+<td>accountId (required)</td>
+<td>string</td>
+<td>登入帳號 ID</td>
 </tr>
 <tr>
-<td>available</td>
-<td>true</td>
-<td>If set to false, the result will include kittens that have already been adopted.</td>
+<td>examType (required)</td>
+<td>enum</td>
+<td>考試種類(目前只有<code>DETERMINE_LEVEL</code>跟<code>ESSAY</code>)</td>
 </tr>
 </tbody></table>
 
 <aside class="success">
-Remember — a happy kitten is an authenticated kitten!
+注意 — examType 是 GraphQL enum type
 </aside>
-<h2 id='get-a-specific-kitten'>Get a Specific Kitten</h2><div class="highlight"><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s1">'kittn'</span>
-
-<span class="n">api</span> <span class="o">=</span> <span class="no">Kittn</span><span class="o">::</span><span class="no">APIClient</span><span class="p">.</span><span class="nf">authorize!</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">)</span>
-<span class="n">api</span><span class="p">.</span><span class="nf">kittens</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">kittn</span>
-
-<span class="n">api</span> <span class="o">=</span> <span class="n">kittn</span><span class="p">.</span><span class="n">authorize</span><span class="p">(</span><span class="s">'meowmeowmeow'</span><span class="p">)</span>
-<span class="n">api</span><span class="p">.</span><span class="n">kittens</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-</code></pre></div><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="s2">"http://example.com/api/kittens/2"</span> <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"Authorization: meowmeowmeow"</span>
-</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">kittn</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">"</span><span class="s2">kittn</span><span class="dl">"</span><span class="p">);</span>
-
-<span class="kd">let</span> <span class="nx">api</span> <span class="o">=</span> <span class="nx">kittn</span><span class="p">.</span><span class="nx">authorize</span><span class="p">(</span><span class="dl">"</span><span class="s2">meowmeowmeow</span><span class="dl">"</span><span class="p">);</span>
-<span class="kd">let</span> <span class="nx">max</span> <span class="o">=</span> <span class="nx">api</span><span class="p">.</span><span class="nx">kittens</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
-</code></pre></div>
-<blockquote>
-<p>The above command returns JSON structured like this:</p>
-</blockquote>
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Max"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"breed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"unknown"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"fluffiness"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"cuteness"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w">
+<h2 id='questions-query'>Questions - Query</h2><div class="highlight"><pre class="highlight graphql tab-graphql"><code><span class="k">query</span><span class="w"> </span><span class="n">questions</span><span class="w"> </span><span class="p">{</span><span class="w">
+  </span><span class="n">questions</span><span class="p">(</span><span class="n">questionId</span><span class="p">:</span><span class="w"> </span><span class="s2">"TOCFL1:HSK2:SA|1000000021"</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="n">questions</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="n">levelId</span><span class="w">
+      </span><span class="n">level</span><span class="w">
+      </span><span class="n">sk</span><span class="w">
+      </span><span class="n">HSKLevel</span><span class="w">
+      </span><span class="n">questionId</span><span class="w">
+      </span><span class="n">TocflLevel</span><span class="w">
+      </span><span class="n">question</span><span class="w">
+      </span><span class="n">reference</span><span class="w">
+      </span><span class="n">source</span><span class="w">
+      </span><span class="n">type</span><span class="w">
+      </span><span class="n">options</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+    </span><span class="n">error</span><span class="w">
+    </span><span class="n">message</span><span class="w">
+  </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
-<p>This endpoint retrieves a specific kitten.</p>
-
-<aside class="warning">Inside HTML code blocks like this one, you can't use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
-<h3 id='http-request-2'>HTTP Request</h3>
-<p><code>GET http://example.com/kittens/&lt;ID&gt;</code></p>
-<h3 id='url-parameters'>URL Parameters</h3>
+<blockquote>
+<p>以上的 questions query 會回傳以下 JSON:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"questions"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"questions"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"levelId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"TOCFL1:HSK2:SA"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"level"</span><span class="p">:</span><span class="w"> </span><span class="s2">"TOCFL1, HSK2"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"sk"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1000000021"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"HSKLevel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"questionId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"TOCFL1:HSK2:SA|1000000021"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"TocflLevel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"question"</span><span class="p">:</span><span class="w"> </span><span class="s2">"这种鱼___年春天最多，男人们会一起搭船去海上找鱼。"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"这种鱼___年春天最多，男人们会一起搭船去海上找鱼。"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"source"</span><span class="p">:</span><span class="w"> </span><span class="s2">"TOCFL考題"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SA"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"options"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{</span><span class="se">\"</span><span class="s2">A</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">没有</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">B</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">每</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">C</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">几</span><span class="se">\"</span><span class="s2">}"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">],</span><span class="w">
+      </span><span class="nl">"error"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>Questions query API 可以根據 input parameters 回傳一個或是多個考題，如果有收到<code>questionId</code> 的話就只會回傳一個考題。</p>
+<h3 id='query-input-parameters'>Query Input Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
+<th>type</th>
 <th>Description</th>
 </tr>
 </thead><tbody>
 <tr>
-<td>ID</td>
-<td>The ID of the kitten to retrieve</td>
+<td>questionId (required)</td>
+<td>string</td>
+<td>考題 ID，這是唯一的</td>
+</tr>
+<tr>
+<td>levelId (optional)</td>
+<td>string</td>
+<td>程度 ID (必須配合 <code>sk</code> 或是 (<code>skFrom</code> + <code>skTo</code>))</td>
+</tr>
+<tr>
+<td>sk (optional)</td>
+<td>string</td>
+<td>sort key，每一個程度會有多個 sort key，代表每一個程度會有多個考題</td>
+</tr>
+<tr>
+<td>skFrom (optional)</td>
+<td>string</td>
+<td>起始 sort key</td>
+</tr>
+<tr>
+<td>skTo (optional)</td>
+<td>string</td>
+<td>最終 sort key</td>
 </tr>
 </tbody></table>
-<h2 id='delete-a-specific-kitten'>Delete a Specific Kitten</h2><div class="highlight"><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s1">'kittn'</span>
 
-<span class="n">api</span> <span class="o">=</span> <span class="no">Kittn</span><span class="o">::</span><span class="no">APIClient</span><span class="p">.</span><span class="nf">authorize!</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">)</span>
-<span class="n">api</span><span class="p">.</span><span class="nf">kittens</span><span class="p">.</span><span class="nf">delete</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">kittn</span>
-
-<span class="n">api</span> <span class="o">=</span> <span class="n">kittn</span><span class="p">.</span><span class="n">authorize</span><span class="p">(</span><span class="s">'meowmeowmeow'</span><span class="p">)</span>
-<span class="n">api</span><span class="p">.</span><span class="n">kittens</span><span class="p">.</span><span class="n">delete</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-</code></pre></div><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="s2">"http://example.com/api/kittens/2"</span> <span class="se">\</span>
-  <span class="nt">-X</span> DELETE <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"Authorization: meowmeowmeow"</span>
-</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">kittn</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">"</span><span class="s2">kittn</span><span class="dl">"</span><span class="p">);</span>
-
-<span class="kd">let</span> <span class="nx">api</span> <span class="o">=</span> <span class="nx">kittn</span><span class="p">.</span><span class="nx">authorize</span><span class="p">(</span><span class="dl">"</span><span class="s2">meowmeowmeow</span><span class="dl">"</span><span class="p">);</span>
-<span class="kd">let</span> <span class="nx">max</span> <span class="o">=</span> <span class="nx">api</span><span class="p">.</span><span class="nx">kittens</span><span class="p">.</span><span class="k">delete</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
-</code></pre></div>
-<blockquote>
-<p>The above command returns JSON structured like this:</p>
-</blockquote>
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"deleted"</span><span class="p">:</span><span class="w"> </span><span class="s2">":("</span><span class="w">
+<aside class="warning">目前暫時不用理會 <code>levelId</code>, <code>sk</code>, <code>skFrom</code>, <code>skTo</code> (正在開發中...)</aside>
+<h2 id='answer-question-mutation'>Answer Question - Mutation</h2><div class="highlight"><pre class="highlight graphql tab-graphql"><code><span class="k">mutation</span><span class="w"> </span><span class="n">answerQuestion</span><span class="w"> </span><span class="p">{</span><span class="w">
+  </span><span class="n">answerQuestion</span><span class="p">(</span><span class="w">
+    </span><span class="n">accountId</span><span class="p">:</span><span class="w"> </span><span class="s2">"test-accountId"</span><span class="w">
+    </span><span class="n">sk</span><span class="p">:</span><span class="w"> </span><span class="s2">"exam:DETERMINE_LEVEL:ts:1698090652"</span><span class="w">
+    </span><span class="n">questionId</span><span class="p">:</span><span class="w"> </span><span class="s2">"TOCFL1:HSK2:SA|1000000021"</span><span class="w">
+    </span><span class="n">studentAnswers</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"A"</span><span class="p">]</span><span class="w">
+  </span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="n">nextQuestionId</span><span class="w">
+    </span><span class="n">remainingNumOfQuestion</span><span class="w">
+    </span><span class="n">nextLevel</span><span class="w">
+    </span><span class="n">achievedLevel</span><span class="w">
+    </span><span class="n">examStatus</span><span class="w">
+    </span><span class="n">message</span><span class="w">
+    </span><span class="n">error</span><span class="w">
+  </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
-<p>This endpoint deletes a specific kitten.</p>
-<h3 id='http-request-3'>HTTP Request</h3>
-<p><code>DELETE http://example.com/kittens/&lt;ID&gt;</code></p>
-<h3 id='url-parameters-2'>URL Parameters</h3>
+<blockquote>
+<p>以上的 answerQuestion mutation 會回傳以下 JSON:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"answerQuestion"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"nextQuestionId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"TOCFL1:HSK2:SA|1000000017"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"remainingNumOfQuestion"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"nextLevel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"TOCFL1, HSK2"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"achievedLevel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"TOCFL1, HSK2"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"examStatus"</span><span class="p">:</span><span class="w"> </span><span class="s2">"IN_PROGRESS"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"error"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+<p>測驗結束的 Response 如下：</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"answerQuestion"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"nextQuestionId"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"remainingNumOfQuestion"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"nextLevel"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"achievedLevel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"TOCFL1, HSK2"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"examStatus"</span><span class="p">:</span><span class="w"> </span><span class="s2">"COMPLETED"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"error"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>Answer Question mutation 可以讓學生回答考題。
+每一次的 API call 都會回傳下一題的題目 ID (<code>nextQuestionId</code>) 與測驗狀態 (<code>examStatus</code>)，當 <code>nextQuestionId</code> 等於空字串(<code>&quot;&quot;</code>) 並且 <code>examStatus</code> 等於 <code>COMPLETED</code>，代表測驗結束，並且最終程度 (<code>achievedLevel</code>) 就是學生的程度。</p>
+<h3 id='mutation-input-parameters-2'>Mutation Input Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
+<th>type</th>
 <th>Description</th>
 </tr>
 </thead><tbody>
 <tr>
-<td>ID</td>
-<td>The ID of the kitten to delete</td>
+<td>accountId</td>
+<td>string</td>
+<td>登入帳號 ID</td>
+</tr>
+<tr>
+<td>sk</td>
+<td>string</td>
+<td>考試的 sort key</td>
+</tr>
+<tr>
+<td>questionId</td>
+<td>string</td>
+<td>題目 ID</td>
+</tr>
+<tr>
+<td>studentAnswers</td>
+<td>Array of String</td>
+<td>學生的答案</td>
+</tr>
+</tbody></table>
+<h2 id='exams-query'>Exams - Query</h2><div class="highlight"><pre class="highlight graphql tab-graphql"><code><span class="k">query</span><span class="w"> </span><span class="n">exams</span><span class="w"> </span><span class="p">{</span><span class="w">
+  </span><span class="n">exams</span><span class="p">(</span><span class="n">accountId</span><span class="p">:</span><span class="w"> </span><span class="s2">"test-accountId"</span><span class="p">,</span><span class="w"> </span><span class="n">withDetails</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="n">error</span><span class="w">
+    </span><span class="n">message</span><span class="w">
+    </span><span class="n">exams</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="n">accountId</span><span class="w">
+      </span><span class="n">sk</span><span class="w">
+      </span><span class="n">nextQuestionId</span><span class="w">
+      </span><span class="n">questionDetails</span><span class="w">
+      </span><span class="n">remainingNumOfQuestion</span><span class="w">
+      </span><span class="n">startTime</span><span class="w">
+      </span><span class="n">status</span><span class="w">
+      </span><span class="n">totalNumOfQuestion</span><span class="w">
+      </span><span class="n">achievedLevel</span><span class="w">
+      </span><span class="n">type</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+<p>以上的 exams query 會回傳以下 JSON:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"exams"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"error"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"exams"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"accountId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"test-accountId"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"sk"</span><span class="p">:</span><span class="w"> </span><span class="s2">"exam:DETERMINE_LEVEL:ts:1698090545"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"nextQuestionId"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"questionDetails"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"remainingNumOfQuestion"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"startTime"</span><span class="p">:</span><span class="w"> </span><span class="mi">1698090545</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"COMPLETED"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"totalNumOfQuestion"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"achievedLevel"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"DETERMINE_LEVEL"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"accountId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"test-accountId"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"sk"</span><span class="p">:</span><span class="w"> </span><span class="s2">"exam:DETERMINE_LEVEL:ts:1698090652"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"nextQuestionId"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"questionDetails"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"remainingNumOfQuestion"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"startTime"</span><span class="p">:</span><span class="w"> </span><span class="mi">1698090652</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"COMPLETED"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"totalNumOfQuestion"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"achievedLevel"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"DETERMINE_LEVEL"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">]</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+<p>如果 withDetails 是 true 的話，會回傳以下 JSON：</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"exams"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"error"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"exams"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"accountId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"test-accountId"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"sk"</span><span class="p">:</span><span class="w"> </span><span class="s2">"exam:DETERMINE_LEVEL:ts:1698090545"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"nextQuestionId"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"questionDetails"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{</span><span class="se">\"</span><span class="s2">1</span><span class="se">\"</span><span class="s2">:{</span><span class="se">\"</span><span class="s2">sk</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">1000000002</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">correctAnswers</span><span class="se">\"</span><span class="s2">:[</span><span class="se">\"</span><span class="s2">A</span><span class="se">\"</span><span class="s2">],</span><span class="se">\"</span><span class="s2">studentAnswers</span><span class="se">\"</span><span class="s2">:[</span><span class="se">\"</span><span class="s2">A</span><span class="se">\"</span><span class="s2">],</span><span class="se">\"</span><span class="s2">level</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">TOCFL1, HSK2</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">levelId</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">TOCFL1:HSK2:SA</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">isCorrect</span><span class="se">\"</span><span class="s2">:true},</span><span class="se">\"</span><span class="s2">2</span><span class="se">\"</span><span class="s2">:{</span><span class="se">\"</span><span class="s2">sk</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">1000000013</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">correctAnswers</span><span class="se">\"</span><span class="s2">:[</span><span class="se">\"</span><span class="s2">B</span><span class="se">\"</span><span class="s2">],</span><span class="se">\"</span><span class="s2">studentAnswers</span><span class="se">\"</span><span class="s2">:[</span><span class="se">\"</span><span class="s2">A</span><span class="se">\"</span><span class="s2">],</span><span class="se">\"</span><span class="s2">level</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">TOCFL1, HSK2</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">levelId</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">TOCFL1:HSK2:SA</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">isCorrect</span><span class="se">\"</span><span class="s2">:false},</span><span class="se">\"</span><span class="s2">3</span><span class="se">\"</span><span class="s2">:{</span><span class="se">\"</span><span class="s2">sk</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">1000000004</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">correctAnswers</span><span class="se">\"</span><span class="s2">:[</span><span class="se">\"</span><span class="s2">A</span><span class="se">\"</span><span class="s2">],</span><span class="se">\"</span><span class="s2">studentAnswers</span><span class="se">\"</span><span class="s2">:[</span><span class="se">\"</span><span class="s2">A</span><span class="se">\"</span><span class="s2">],</span><span class="se">\"</span><span class="s2">level</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">TOCFL1, HSK2</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">levelId</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">TOCFL1:HSK2:SA</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">isCorrect</span><span class="se">\"</span><span class="s2">:true},</span><span class="se">\"</span><span class="s2">consecutiveWrong</span><span class="se">\"</span><span class="s2">:0,</span><span class="se">\"</span><span class="s2">consecutiveCorrect</span><span class="se">\"</span><span class="s2">:1}"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"remainingNumOfQuestion"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"startTime"</span><span class="p">:</span><span class="w"> </span><span class="mi">1698090545</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"COMPLETED"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"totalNumOfQuestion"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"achievedLevel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"TOCFL1, HSK2"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"DETERMINE_LEVEL"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"accountId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"test-accountId"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"sk"</span><span class="p">:</span><span class="w"> </span><span class="s2">"exam:DETERMINE_LEVEL:ts:1698090652"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"nextQuestionId"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"questionDetails"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{</span><span class="se">\"</span><span class="s2">1</span><span class="se">\"</span><span class="s2">:{</span><span class="se">\"</span><span class="s2">sk</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">1000000021</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">correctAnswers</span><span class="se">\"</span><span class="s2">:[</span><span class="se">\"</span><span class="s2">B</span><span class="se">\"</span><span class="s2">],</span><span class="se">\"</span><span class="s2">studentAnswers</span><span class="se">\"</span><span class="s2">:[</span><span class="se">\"</span><span class="s2">A</span><span class="se">\"</span><span class="s2">],</span><span class="se">\"</span><span class="s2">level</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">TOCFL1, HSK2</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">levelId</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">TOCFL1:HSK2:SA</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">isCorrect</span><span class="se">\"</span><span class="s2">:false},</span><span class="se">\"</span><span class="s2">2</span><span class="se">\"</span><span class="s2">:{</span><span class="se">\"</span><span class="s2">sk</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">1000000017</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">correctAnswers</span><span class="se">\"</span><span class="s2">:[</span><span class="se">\"</span><span class="s2">A</span><span class="se">\"</span><span class="s2">],</span><span class="se">\"</span><span class="s2">studentAnswers</span><span class="se">\"</span><span class="s2">:[</span><span class="se">\"</span><span class="s2">A</span><span class="se">\"</span><span class="s2">],</span><span class="se">\"</span><span class="s2">level</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">TOCFL1, HSK2</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">levelId</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">TOCFL1:HSK2:SA</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">isCorrect</span><span class="se">\"</span><span class="s2">:true},</span><span class="se">\"</span><span class="s2">3</span><span class="se">\"</span><span class="s2">:{</span><span class="se">\"</span><span class="s2">sk</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">1000000002</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">correctAnswers</span><span class="se">\"</span><span class="s2">:[</span><span class="se">\"</span><span class="s2">A</span><span class="se">\"</span><span class="s2">],</span><span class="se">\"</span><span class="s2">studentAnswers</span><span class="se">\"</span><span class="s2">:[</span><span class="se">\"</span><span class="s2">A</span><span class="se">\"</span><span class="s2">],</span><span class="se">\"</span><span class="s2">level</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">TOCFL1, HSK2</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">levelId</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">TOCFL1:HSK2:SA</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">isCorrect</span><span class="se">\"</span><span class="s2">:true},</span><span class="se">\"</span><span class="s2">consecutiveWrong</span><span class="se">\"</span><span class="s2">:0,</span><span class="se">\"</span><span class="s2">consecutiveCorrect</span><span class="se">\"</span><span class="s2">:0}"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"remainingNumOfQuestion"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"startTime"</span><span class="p">:</span><span class="w"> </span><span class="mi">1698090652</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"COMPLETED"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"totalNumOfQuestion"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"achievedLevel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"TOCFL1, HSK2"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"DETERMINE_LEVEL"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">]</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>Exam query 可以根據 input parameters 回傳學生的 &quot;一個&quot; 或 &quot;多個&quot; 考題歷史紀錄。
+<code>withDetails</code> 預設為 <code>false</code>(API 響應速度較快)，當需要取得學生的作答記錄時，在把 <code>withDetails</code> 設定為 <code>true</code>。</p>
+
+<p>比較建議的做法是，可以先不傳<code>withDetails</code>(預設為<code>false</code>)，並且拿到學生的多個測驗歷史後，在讓學生點選某一個測驗，這時候在把 <code>withDetails</code>設定為<code>true</code> 並且傳(<code>accountId</code> + <code>sk</code>(學生選中的 sk))給 Exam API，這時 Exam API 就會把所有測驗細節回傳給學生。</p>
+<h3 id='mutation-input-parameters-3'>Mutation Input Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>accountId (required)</td>
+<td>string</td>
+<td>登入帳號 ID</td>
+</tr>
+<tr>
+<td>sk (optional)</td>
+<td>string</td>
+<td>測驗的 sort key</td>
+</tr>
+<tr>
+<td>examType (optional)</td>
+<td>enum</td>
+<td>考試種類(目前只有<code>DETERMINE_LEVEL</code>跟<code>ESSAY</code>)</td>
+</tr>
+<tr>
+<td>withDetails (預設為 false)</td>
+<td>boolean</td>
+<td>學生的答案</td>
 </tr>
 </tbody></table>
 <h1 id='errors'>Errors</h1>
@@ -588,10 +807,7 @@ This error section is stored in a separate file in <code>includes/_errors.md</co
       </div>
       <div class="dark-box">
           <div class="lang-selector">
-                <a href="#" data-language-name="shell">shell</a>
-                <a href="#" data-language-name="ruby">ruby</a>
-                <a href="#" data-language-name="python">python</a>
-                <a href="#" data-language-name="javascript">javascript</a>
+                <a href="#" data-language-name="graphql">graphql</a>
           </div>
       </div>
     </div>
