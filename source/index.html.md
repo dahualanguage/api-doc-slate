@@ -2,10 +2,7 @@
 title: 大話 API Reference
 
 language_tabs: # must be one of https://github.com/rouge-ruby/rouge/wiki/List-of-supported-languages-and-lexers
-  - shell
-  - ruby
-  - python
-  - javascript
+  - graphql
 
 toc_footers:
   - <a href='#'>Sign Up for a Developer Key</a>
@@ -20,225 +17,356 @@ code_clipboard: true
 
 meta:
   - name: description
-    content: Documentation for the Kittn API
+    content: Documentation for the Dahua API
 ---
 
 # Introduction
 
-Welcome to the Kittn API! You can use our API to access Kittn API endpoints, which can get information on various cats, kittens, and breeds in our database.
+Dahua APIs，目前只有第一版本的考試 APIs，用來幫學生做分級測驗，預計未來會加上更多 APIs.
 
-We have language bindings in Shell, Ruby, Python, and JavaScript! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
+## 測試機(dev) endpoint:
 
-This example API documentation page was created with [Slate](https://github.com/slatedocs/slate). Feel free to edit it and use it as a base for your own API's documentation.
+`https://bmxybfldb5bjdickj2z5gtm2ui.appsync-api.ap-southeast-1.amazonaws.com/graphql`
+
+## 正式機(prod) endpoint:
+
+`還沒架，預計明年初開始架` 😆
 
 # Authentication
 
-> To authorize, use this code:
+> To authorize, use below api key:
 
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
+```graphql
+{
+  "x-api-key": "yourApiKey"
+}
 ```
 
-```python
-import kittn
+Dahua GraphQL API 要求每一個 request 必須要有未過期的 API KEY.
+API KEY 每一年需要更新一次 (找 Wilson 拿 API KEY.)。
 
-api = kittn.authorize('meowmeowmeow')
-```
-
-```shell
-# With shell, you can just pass the correct header with each request
-curl "api_endpoint_here" \
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require("kittn");
-
-let api = kittn.authorize("meowmeowmeow");
-```
-
-> Make sure to replace `meowmeowmeow` with your API key.
-
-Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our [developer portal](http://example.com/developers).
-
-Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:
-
-`Authorization: meowmeowmeow`
+`x-api-key: yourApiKey`
 
 <aside class="notice">
-You must replace <code>meowmeowmeow</code> with your personal API key.
+You must replace <code>yourApiKey</code> with your API key.
 </aside>
 
-# Kittens
+# Exam
 
-## Get All Kittens
+## Start Exam - Mutation
 
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get
+```graphql
+mutation startExam {
+  startExam(accountId: "test-accountId", examType: DETERMINE_LEVEL) {
+    error
+    message
+    exam {
+      accountId
+      sk
+      startTime
+      nextQuestionNumber
+      nextQuestionId
+      status
+      type
+      remainingNumOfQuestion
+      totalNumOfQuestion
+      questionDetails
+      achievedLevel
+    }
+  }
+}
 ```
 
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get()
-```
-
-```shell
-curl "http://example.com/api/kittens" \
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require("kittn");
-
-let api = kittn.authorize("meowmeowmeow");
-let kittens = api.kittens.get();
-```
-
-> The above command returns JSON structured like this:
+> 以上的 startExam mutation 會回傳以下 JSON:
 
 ```json
-[
-  {
-    "id": 1,
-    "name": "Fluffums",
-    "breed": "calico",
-    "fluffiness": 6,
-    "cuteness": 7
-  },
-  {
-    "id": 2,
-    "name": "Max",
-    "breed": "unknown",
-    "fluffiness": 5,
-    "cuteness": 10
+{
+  "data": {
+    "startExam": {
+      "error": false,
+      "message": "",
+      "exam": {
+        "accountId": "test-accountId",
+        "sk": "exam:DETERMINE_LEVEL:ts:1698090652",
+        "startTime": 1698090652,
+        "nextQuestionNumber": 1,
+        "nextQuestionId": "TOCFL1:HSK2:SA|1000000021",
+        "status": "IN_PROGRESS",
+        "type": "DETERMINE_LEVEL",
+        "remainingNumOfQuestion": 3,
+        "totalNumOfQuestion": 3,
+        "questionDetails": null,
+        "achievedLevel": "TOCFL1, HSK2"
+      }
+    }
   }
-]
+}
 ```
 
-This endpoint retrieves all kittens.
+startExam mutation 會開啟一個新的考試，一個學生可以有多個考試。
+開啟一個考試後，API 會回傳下一題的題目 ID(`nextQuestionId`)
 
-### HTTP Request
+考試狀態(`status`) 有 3 種(`IN_PROGRESS`, `COMPLETED`, `CANCELED`)
 
-`GET http://example.com/api/kittens`
+考試類型(`type`) 有 2 種(`DETERMINE_LEVEL`, `ESSAY`)
 
-### Query Parameters
+### Mutation Input Parameters
 
-| Parameter    | Default | Description                                                                      |
-| ------------ | ------- | -------------------------------------------------------------------------------- |
-| include_cats | false   | If set to true, the result will also include cats.                               |
-| available    | true    | If set to false, the result will include kittens that have already been adopted. |
+| Parameter            | type   | Description                                  |
+| -------------------- | ------ | -------------------------------------------- |
+| accountId (required) | string | 登入帳號 ID                                  |
+| examType (required)  | enum   | 考試種類(目前只有`DETERMINE_LEVEL`跟`ESSAY`) |
 
 <aside class="success">
-Remember — a happy kitten is an authenticated kitten!
+注意 — examType 是 GraphQL enum type
 </aside>
 
-## Get a Specific Kitten
+## Questions - Query
 
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```shell
-curl "http://example.com/api/kittens/2" \
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require("kittn");
-
-let api = kittn.authorize("meowmeowmeow");
-let max = api.kittens.get(2);
-```
-
-> The above command returns JSON structured like this:
-
-```json
-{
-  "id": 2,
-  "name": "Max",
-  "breed": "unknown",
-  "fluffiness": 5,
-  "cuteness": 10
+```graphql
+query questions {
+  questions(questionId: "TOCFL1:HSK2:SA|1000000021") {
+    questions {
+      levelId
+      level
+      sk
+      HSKLevel
+      questionId
+      TocflLevel
+      question
+      reference
+      source
+      type
+      options
+    }
+    error
+    message
+  }
 }
 ```
 
-This endpoint retrieves a specific kitten.
-
-<aside class="warning">Inside HTML code blocks like this one, you can't use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
-
-### HTTP Request
-
-`GET http://example.com/kittens/<ID>`
-
-### URL Parameters
-
-| Parameter | Description                      |
-| --------- | -------------------------------- |
-| ID        | The ID of the kitten to retrieve |
-
-## Delete a Specific Kitten
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.delete(2)
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.delete(2)
-```
-
-```shell
-curl "http://example.com/api/kittens/2" \
-  -X DELETE \
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require("kittn");
-
-let api = kittn.authorize("meowmeowmeow");
-let max = api.kittens.delete(2);
-```
-
-> The above command returns JSON structured like this:
+> 以上的 questions query 會回傳以下 JSON:
 
 ```json
 {
-  "id": 2,
-  "deleted": ":("
+  "data": {
+    "questions": {
+      "questions": [
+        {
+          "levelId": "TOCFL1:HSK2:SA",
+          "level": "TOCFL1, HSK2",
+          "sk": "1000000021",
+          "HSKLevel": "2",
+          "questionId": "TOCFL1:HSK2:SA|1000000021",
+          "TocflLevel": "1",
+          "question": "这种鱼___年春天最多，男人们会一起搭船去海上找鱼。",
+          "reference": "这种鱼___年春天最多，男人们会一起搭船去海上找鱼。",
+          "source": "TOCFL考題",
+          "type": "SA",
+          "options": "{\"A\":\"没有\",\"B\":\"每\",\"C\":\"几\"}"
+        }
+      ],
+      "error": false,
+      "message": ""
+    }
+  }
 }
 ```
 
-This endpoint deletes a specific kitten.
+Questions query API 可以根據 input parameters 回傳一個或是多個考題，如果有收到`questionId` 的話就只會回傳一個考題。
 
-### HTTP Request
+### Query Input Parameters
 
-`DELETE http://example.com/kittens/<ID>`
+| Parameter             | type   | Description                                                       |
+| --------------------- | ------ | ----------------------------------------------------------------- |
+| questionId (required) | string | 考題 ID，這是唯一的                                               |
+| levelId (optional)    | string | 程度 ID (必須配合 `sk` 或是 (`skFrom` + `skTo`))                  |
+| sk (optional)         | string | sort key，每一個程度會有多個 sort key，代表每一個程度會有多個考題 |
+| skFrom (optional)     | string | 起始 sort key                                                     |
+| skTo (optional)       | string | 最終 sort key                                                     |
 
-### URL Parameters
+<aside class="warning">目前暫時不用理會 <code>levelId</code>, <code>sk</code>, <code>skFrom</code>, <code>skTo</code> (正在開發中...)</aside>
 
-| Parameter | Description                    |
-| --------- | ------------------------------ |
-| ID        | The ID of the kitten to delete |
+## Answer Question - Mutation
+
+```graphql
+mutation answerQuestion {
+  answerQuestion(
+    accountId: "test-accountId"
+    sk: "exam:DETERMINE_LEVEL:ts:1698090652"
+    questionId: "TOCFL1:HSK2:SA|1000000021"
+    studentAnswers: ["A"]
+  ) {
+    nextQuestionId
+    remainingNumOfQuestion
+    nextLevel
+    achievedLevel
+    examStatus
+    message
+    error
+  }
+}
+```
+
+> 以上的 answerQuestion mutation 會回傳以下 JSON:
+
+```json
+{
+  "data": {
+    "answerQuestion": {
+      "nextQuestionId": "TOCFL1:HSK2:SA|1000000017",
+      "remainingNumOfQuestion": 2,
+      "nextLevel": "TOCFL1, HSK2",
+      "achievedLevel": "TOCFL1, HSK2",
+      "examStatus": "IN_PROGRESS",
+      "message": "",
+      "error": false
+    }
+  }
+}
+```
+
+> 測驗結束的 Response 如下：
+
+```json
+{
+  "data": {
+    "answerQuestion": {
+      "nextQuestionId": "",
+      "remainingNumOfQuestion": 0,
+      "nextLevel": "",
+      "achievedLevel": "TOCFL1, HSK2",
+      "examStatus": "COMPLETED",
+      "message": "",
+      "error": false
+    }
+  }
+}
+```
+
+Answer Question mutation 可以讓學生回答考題。
+每一次的 API call 都會回傳下一題的題目 ID (`nextQuestionId`) 與測驗狀態 (`examStatus`)，當 `nextQuestionId` 等於空字串(`""`) 並且 `examStatus` 等於 `COMPLETED`，代表測驗結束，並且最終程度 (`achievedLevel`) 就是學生的程度。
+
+### Mutation Input Parameters
+
+| Parameter      | type            | Description     |
+| -------------- | --------------- | --------------- |
+| accountId      | string          | 登入帳號 ID     |
+| sk             | string          | 考試的 sort key |
+| questionId     | string          | 題目 ID         |
+| studentAnswers | Array of String | 學生的答案      |
+
+## Exams - Query
+
+```graphql
+query exams {
+  exams(accountId: "test-accountId", withDetails: false) {
+    error
+    message
+    exams {
+      accountId
+      sk
+      nextQuestionId
+      questionDetails
+      remainingNumOfQuestion
+      startTime
+      status
+      totalNumOfQuestion
+      achievedLevel
+      type
+    }
+  }
+}
+```
+
+> 以上的 exams query 會回傳以下 JSON:
+
+```json
+{
+  "data": {
+    "exams": {
+      "error": false,
+      "message": "",
+      "exams": [
+        {
+          "accountId": "test-accountId",
+          "sk": "exam:DETERMINE_LEVEL:ts:1698090545",
+          "nextQuestionId": null,
+          "questionDetails": null,
+          "remainingNumOfQuestion": null,
+          "startTime": 1698090545,
+          "status": "COMPLETED",
+          "totalNumOfQuestion": null,
+          "achievedLevel": null,
+          "type": "DETERMINE_LEVEL"
+        },
+        {
+          "accountId": "test-accountId",
+          "sk": "exam:DETERMINE_LEVEL:ts:1698090652",
+          "nextQuestionId": null,
+          "questionDetails": null,
+          "remainingNumOfQuestion": null,
+          "startTime": 1698090652,
+          "status": "COMPLETED",
+          "totalNumOfQuestion": null,
+          "achievedLevel": null,
+          "type": "DETERMINE_LEVEL"
+        }
+      ]
+    }
+  }
+}
+```
+
+> 如果 withDetails 是 true 的話，會回傳以下 JSON：
+
+```json
+{
+  "data": {
+    "exams": {
+      "error": false,
+      "message": "",
+      "exams": [
+        {
+          "accountId": "test-accountId",
+          "sk": "exam:DETERMINE_LEVEL:ts:1698090545",
+          "nextQuestionId": "",
+          "questionDetails": "{\"1\":{\"sk\":\"1000000002\",\"correctAnswers\":[\"A\"],\"studentAnswers\":[\"A\"],\"level\":\"TOCFL1, HSK2\",\"levelId\":\"TOCFL1:HSK2:SA\",\"isCorrect\":true},\"2\":{\"sk\":\"1000000013\",\"correctAnswers\":[\"B\"],\"studentAnswers\":[\"A\"],\"level\":\"TOCFL1, HSK2\",\"levelId\":\"TOCFL1:HSK2:SA\",\"isCorrect\":false},\"3\":{\"sk\":\"1000000004\",\"correctAnswers\":[\"A\"],\"studentAnswers\":[\"A\"],\"level\":\"TOCFL1, HSK2\",\"levelId\":\"TOCFL1:HSK2:SA\",\"isCorrect\":true},\"consecutiveWrong\":0,\"consecutiveCorrect\":1}",
+          "remainingNumOfQuestion": 0,
+          "startTime": 1698090545,
+          "status": "COMPLETED",
+          "totalNumOfQuestion": 3,
+          "achievedLevel": "TOCFL1, HSK2",
+          "type": "DETERMINE_LEVEL"
+        },
+        {
+          "accountId": "test-accountId",
+          "sk": "exam:DETERMINE_LEVEL:ts:1698090652",
+          "nextQuestionId": "",
+          "questionDetails": "{\"1\":{\"sk\":\"1000000021\",\"correctAnswers\":[\"B\"],\"studentAnswers\":[\"A\"],\"level\":\"TOCFL1, HSK2\",\"levelId\":\"TOCFL1:HSK2:SA\",\"isCorrect\":false},\"2\":{\"sk\":\"1000000017\",\"correctAnswers\":[\"A\"],\"studentAnswers\":[\"A\"],\"level\":\"TOCFL1, HSK2\",\"levelId\":\"TOCFL1:HSK2:SA\",\"isCorrect\":true},\"3\":{\"sk\":\"1000000002\",\"correctAnswers\":[\"A\"],\"studentAnswers\":[\"A\"],\"level\":\"TOCFL1, HSK2\",\"levelId\":\"TOCFL1:HSK2:SA\",\"isCorrect\":true},\"consecutiveWrong\":0,\"consecutiveCorrect\":0}",
+          "remainingNumOfQuestion": 0,
+          "startTime": 1698090652,
+          "status": "COMPLETED",
+          "totalNumOfQuestion": 3,
+          "achievedLevel": "TOCFL1, HSK2",
+          "type": "DETERMINE_LEVEL"
+        }
+      ]
+    }
+  }
+}
+```
+
+Exam query 可以根據 input parameters 回傳學生的 "一個" 或 "多個" 考題歷史紀錄。
+`withDetails` 預設為 `false`(API 響應速度較快)，當需要取得學生的作答記錄時，在把 `withDetails` 設定為 `true`。
+
+比較建議的做法是，可以先不傳`withDetails`(預設為`false`)，並且拿到學生的多個測驗歷史後，在讓學生點選某一個測驗，這時候在把 `withDetails`設定為`true` 並且傳(`accountId` + `sk`(學生選中的 sk))給 Exam API，這時 Exam API 就會把所有測驗細節回傳給學生。
+
+### Mutation Input Parameters
+
+| Parameter                  | type    | Description                                  |
+| -------------------------- | ------- | -------------------------------------------- |
+| accountId (required)       | string  | 登入帳號 ID                                  |
+| sk (optional)              | string  | 測驗的 sort key                              |
+| examType (optional)        | enum    | 考試種類(目前只有`DETERMINE_LEVEL`跟`ESSAY`) |
+| withDetails (預設為 false) | boolean | 學生的答案                                   |
