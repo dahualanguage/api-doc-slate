@@ -88,3 +88,38 @@ Also, thanks to [Sauce Labs](http://saucelabs.com) for sponsoring the developmen
 ```
 bundle exec middleman server
 ```
+
+PlantText
+
+```
+@startuml
+
+title 分級測驗考試流程
+
+participant "冠富" as Client
+participant "AWS API" as AWS
+
+note over Client: 1. 開始一個新的測驗
+Client -> AWS: startExam(accountId)
+note right: 幫accountId創建一個exam
+AWS --> Client: accountId, sk, nextQuestionId
+
+note over Client: 2. 取得考題
+Client -> AWS: getQuestions(nextQuestionId)
+note right: 使用nextQuestionId獲得問題
+AWS --> Client: question
+
+note over Client: 3. 回答題目
+Client -> AWS: answerQuestion(accountId, sk, questionId, answer)
+note right: 判斷答案是否正確，並會傳下一題的ID
+AWS --> Client: nextQuestionId, examStatus
+
+note over Client: 重複第2,3步，直到examStatus等於COMPLETED
+
+note over Client: 4. 回顧測驗結果，或是測驗歷史紀錄
+Client -> AWS: getExams(accountId, sk)
+note right: 回傳測驗結果
+AWS --> Client: Exam
+
+@enduml
+```
