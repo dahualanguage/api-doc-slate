@@ -20,9 +20,14 @@ meta:
     content: Documentation for the Dahua API
 ---
 
-# Introduction
+# Getting started
 
-Dahua APIs，目前只有第一版本的考試 APIs，用來幫學生做分級測驗，預計未來會加上更多 APIs.
+Dahua APIs，目前採用 [GraphQL](https://graphql.org/) 的技術，可以讓 Client 端比較有彈性的選擇需要什麼資料，可以避免資源浪費。
+目前只有第一版本的考試 APIs，用來幫學生做分級測驗，預計未來會加上更多 APIs。
+
+以下是 "分級測驗 API" 的流程圖。
+
+![分級測驗 API](./images/exam.svg)
 
 ## 測試機(dev) endpoint:
 
@@ -44,13 +49,17 @@ Dahua APIs，目前只有第一版本的考試 APIs，用來幫學生做分級�
 
 Dahua GraphQL API 要求每一個 request 必須要有未過期的 API KEY.
 
-API KEY 每一年需要更新一次 (找 Wilson 拿 API KEY.)。
+API KEY 每一年需要更新一次 (找 Wilson 拿 API KEY.)
 
 `x-api-key: yourApiKey`
 
 <aside class="notice">
 You must replace <code>yourApiKey</code> with your API key.
 </aside>
+
+# Time
+
+因為用戶可能來自世界各地，所以在這個系統中的所有 `startTime` 都是 [epoch timestamp](https://www.epochconverter.com/) 的形式 (例如 `1698117168`)，Client 端要再根據用戶的時區轉換時間。
 
 # Exam
 
@@ -398,7 +407,9 @@ query exams {
 ```
 
 Exam query 可以根據 input parameters 回傳學生的 "一個" 或 "多個" 考題歷史紀錄。
-`withDetails` 預設為 `false`(API 響應速度較快)，當需要取得學生的作答記錄時，在把 `withDetails` 設定為 `true`。
+
+1.  當你只提供 `accountId` 的情況下，Exam API 會回傳這個登錄帳號下 "所有" 的測驗歷史紀錄。
+2.  當你提通 `accountId` + `sk` 的情況下，Exam API 會回傳這個登錄帳號下 "一個" 測驗記錄。
 
 比較建議的做法是，可以先不傳`withDetails`(預設為`false`)，並且拿到學生的多個測驗歷史後，在讓學生點選某一個測驗，這時候在把 `withDetails`設定為`true` 並且傳(`accountId` + `sk`(學生選中的 sk))給 Exam API，這時 Exam API 就會把所有測驗細節回傳給學生。
 
@@ -411,12 +422,16 @@ Exam query 可以根據 input parameters 回傳學生的 "一個" 或 "多個" �
 | examType (optional)        | enum    | 考試種類(目前只有`DETERMINE_LEVEL`跟`ESSAY`) |
 | withDetails (預設為 false) | boolean | 學生的答案                                   |
 
+<aside class="success">
+ <code>withDetails</code> 預設為 <code>false</code> (API 響應速度較快)，當需要取得學生的作答記錄時，在把 <code>withDetails</code> 設定為 <code>true</code>。
+</aside>
+
 ### Response
 
 | Parameter              | type    | Description                                      |
 | ---------------------- | ------- | ------------------------------------------------ |
 | accountId              | string  | 登入帳號 ID                                      |
-| sk                     | Int     | 測驗的 sort key                                  |
+| sk                     | string  | 測驗的 sort key                                  |
 | nextQuestionId         | string  | 下一題考題的 Id                                  |
 | questionDetails        | AWSJSON | 當前測驗的考試細節，包含學生選擇的答案與正確答案 |
 | remainingNumOfQuestion | Int     | 當前測驗剩下題數                                 |
@@ -425,3 +440,7 @@ Exam query 可以根據 input parameters 回傳學生的 "一個" 或 "多個" �
 | totalNumOfQuestion     | Int     | 當前測驗總共的題數態                             |
 | achievedLevel          | String  | 學生達到的程度                                   |
 | type                   | enum    | 當前測驗的種類                                   |
+
+## Cancel Exam - Mutation
+
+開發中 🛠️ ～～ 以後再補上
