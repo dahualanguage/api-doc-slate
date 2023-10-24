@@ -121,6 +121,20 @@ startExam mutation 會開啟一個新的考試，一個學生可以有多個考�
 注意 — examType 是 GraphQL enum type
 </aside>
 
+### Response
+
+| Parameter              | type    | Description                                              |
+| ---------------------- | ------- | -------------------------------------------------------- |
+| startTime              | string  | 登入帳號 ID                                              |
+| nextQuestionNumber     | Int     | 下一題的題號 (1, 2, 3, 4...)                             |
+| nextQuestionId         | string  | 下一題的題目 ID                                          |
+| status                 | enum    | 考試狀態(目前只有`IN_PROGRESS`, `COMPLETED`, `CANCELED`) |
+| type                   | enum    | 考試種類(目前只有`DETERMINE_LEVEL`, `ESSAY`)             |
+| remainingNumOfQuestion | Int     | 當前測驗剩下題數                                         |
+| totalNumOfQuestion     | Int     | 當前測驗總共的題數                                       |
+| questionDetails        | AWSJSON | 當前測驗的考試細節，包含學生選擇的答案與正確答案         |
+| achievedLevel          | string  | 學生達到的程度                                           |
+
 ## Questions - Query
 
 ```graphql
@@ -186,6 +200,21 @@ Questions query API 可以根據 input parameters 回傳一個或是多個考題
 | skTo (optional)       | string | 最終 sort key                                                     |
 
 <aside class="warning">目前暫時不用理會 <code>levelId</code>, <code>sk</code>, <code>skFrom</code>, <code>skTo</code> (正在開發中...)</aside>
+
+### Response
+
+| Parameter  | type    | Description                                      |
+| ---------- | ------- | ------------------------------------------------ |
+| levelId    | string  | 考題的程度 Id                                    |
+| sk         | string  | 考題的 sort key                                  |
+| level      | string  | 考題的程度 (`TOCFL1, HSK2`)                      |
+| HSKLevel   | string  | HSK 程度                                         |
+| TocflLevel | string  | Tocf 程度                                        |
+| questionId | string  | 考題 ID，這是唯一的                              |
+| reference  | string  | 當前測驗總共的題數                               |
+| source     | string  | 當前測驗的考試細節，包含學生選擇的答案與正確答案 |
+| type       | enum    | 考題的總類，目前有(單選題`SA`, 多選題`MA`)       |
+| options    | AWSJSON | 這是一個包含所有選項的 JSON                      |
 
 ## Answer Question - Mutation
 
@@ -255,6 +284,16 @@ Answer Question mutation 可以讓學生回答考題。
 | sk             | string          | 考試的 sort key |
 | questionId     | string          | 題目 ID         |
 | studentAnswers | Array of String | 學生的答案      |
+
+### Response
+
+| Parameter              | type   | Description      |
+| ---------------------- | ------ | ---------------- |
+| nextQuestionId         | string | 下一題考題的 Id  |
+| remainingNumOfQuestion | Int    | 當前測驗剩下題數 |
+| nextLevel              | string | 下一題考題的難度 |
+| achievedLevel          | string | 學生達到的程度   |
+| examStatus             | enum   | 當前測驗的狀態   |
 
 ## Exams - Query
 
@@ -370,3 +409,18 @@ Exam query 可以根據 input parameters 回傳學生的 "一個" 或 "多個" �
 | sk (optional)              | string  | 測驗的 sort key                              |
 | examType (optional)        | enum    | 考試種類(目前只有`DETERMINE_LEVEL`跟`ESSAY`) |
 | withDetails (預設為 false) | boolean | 學生的答案                                   |
+
+### Response
+
+| Parameter              | type    | Description                                      |
+| ---------------------- | ------- | ------------------------------------------------ |
+| accountId              | string  | 登入帳號 ID                                      |
+| sk                     | Int     | 測驗的 sort key                                  |
+| nextQuestionId         | string  | 下一題考題的 Id                                  |
+| questionDetails        | AWSJSON | 當前測驗的考試細節，包含學生選擇的答案與正確答案 |
+| remainingNumOfQuestion | Int     | 當前測驗剩下題數                                 |
+| startTime              | Int     | 當前測驗的開始時間                               |
+| status                 | enum    | 當前測驗的狀態                                   |
+| totalNumOfQuestion     | Int     | 當前測驗總共的題數態                             |
+| achievedLevel          | String  | 學生達到的程度                                   |
+| type                   | enum    | 當前測驗的種類                                   |

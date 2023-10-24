@@ -4,6 +4,13 @@
 Dahua GraphQL API 並不會回傳 4XX 或 5XX error.
 </aside>
 
+### Response
+
+| Parameter | type    | Description  |
+| --------- | ------- | ------------ |
+| message   | string  | Error 訊息   |
+| error     | boolean | 是否有 Error |
+
 > 如果有 Error 會回傳以下 JSON，並顯示原因，
 
 ```json
