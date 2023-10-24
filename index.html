@@ -303,7 +303,7 @@
       </span>
     </a>
     <div class="toc-wrapper">
-      <img src="images/logo-1e815a84.png" class="logo" alt="" />
+      <img src="images/logo-0f1b28c5.png" class="logo" alt="" />
         <div class="lang-selector">
               <a href="#" data-language-name="graphql">graphql</a>
         </div>
@@ -345,6 +345,11 @@
           </li>
           <li>
             <a href="#errors" class="toc-h1 toc-link" data-title="Errors">Errors</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#response" class="toc-h2 toc-link" data-title="Response">Response</a>
+                  </li>
+              </ul>
           </li>
       </ul>
         <ul class="toc-footer">
@@ -451,6 +456,60 @@ You must replace <code>yourApiKey</code> with your API key.
 <aside class="success">
 注意 — examType 是 GraphQL enum type
 </aside>
+<h3 id='response'>Response</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>startTime</td>
+<td>string</td>
+<td>登入帳號 ID</td>
+</tr>
+<tr>
+<td>nextQuestionNumber</td>
+<td>Int</td>
+<td>下一題的題號 (1, 2, 3, 4...)</td>
+</tr>
+<tr>
+<td>nextQuestionId</td>
+<td>string</td>
+<td>下一題的題目 ID</td>
+</tr>
+<tr>
+<td>status</td>
+<td>enum</td>
+<td>考試狀態(目前只有<code>IN_PROGRESS</code>, <code>COMPLETED</code>, <code>CANCELED</code>)</td>
+</tr>
+<tr>
+<td>type</td>
+<td>enum</td>
+<td>考試種類(目前只有<code>DETERMINE_LEVEL</code>, <code>ESSAY</code>)</td>
+</tr>
+<tr>
+<td>remainingNumOfQuestion</td>
+<td>Int</td>
+<td>當前測驗剩下題數</td>
+</tr>
+<tr>
+<td>totalNumOfQuestion</td>
+<td>Int</td>
+<td>當前測驗總共的題數</td>
+</tr>
+<tr>
+<td>questionDetails</td>
+<td>AWSJSON</td>
+<td>當前測驗的考試細節，包含學生選擇的答案與正確答案</td>
+</tr>
+<tr>
+<td>achievedLevel</td>
+<td>string</td>
+<td>學生達到的程度</td>
+</tr>
+</tbody></table>
 <h2 id='questions-query'>Questions - Query</h2><div class="highlight"><pre class="highlight graphql tab-graphql"><code><span class="k">query</span><span class="w"> </span><span class="n">questions</span><span class="w"> </span><span class="p">{</span><span class="w">
   </span><span class="n">questions</span><span class="p">(</span><span class="n">questionId</span><span class="p">:</span><span class="w"> </span><span class="s2">"TOCFL1:HSK2:SA|1000000021"</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
     </span><span class="n">questions</span><span class="w"> </span><span class="p">{</span><span class="w">
@@ -535,6 +594,65 @@ You must replace <code>yourApiKey</code> with your API key.
 </tbody></table>
 
 <aside class="warning">目前暫時不用理會 <code>levelId</code>, <code>sk</code>, <code>skFrom</code>, <code>skTo</code> (正在開發中...)</aside>
+<h3 id='response-2'>Response</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>levelId</td>
+<td>string</td>
+<td>考題的程度 Id</td>
+</tr>
+<tr>
+<td>sk</td>
+<td>string</td>
+<td>考題的 sort key</td>
+</tr>
+<tr>
+<td>level</td>
+<td>string</td>
+<td>考題的程度 (<code>TOCFL1, HSK2</code>)</td>
+</tr>
+<tr>
+<td>HSKLevel</td>
+<td>string</td>
+<td>HSK 程度</td>
+</tr>
+<tr>
+<td>TocflLevel</td>
+<td>string</td>
+<td>Tocf 程度</td>
+</tr>
+<tr>
+<td>questionId</td>
+<td>string</td>
+<td>考題 ID，這是唯一的</td>
+</tr>
+<tr>
+<td>reference</td>
+<td>string</td>
+<td>當前測驗總共的題數</td>
+</tr>
+<tr>
+<td>source</td>
+<td>string</td>
+<td>當前測驗的考試細節，包含學生選擇的答案與正確答案</td>
+</tr>
+<tr>
+<td>type</td>
+<td>enum</td>
+<td>考題的總類，目前有(單選題<code>SA</code>, 多選題<code>MA</code>)</td>
+</tr>
+<tr>
+<td>options</td>
+<td>AWSJSON</td>
+<td>這是一個包含所有選項的 JSON</td>
+</tr>
+</tbody></table>
 <h2 id='answer-question-mutation'>Answer Question - Mutation</h2><div class="highlight"><pre class="highlight graphql tab-graphql"><code><span class="k">mutation</span><span class="w"> </span><span class="n">answerQuestion</span><span class="w"> </span><span class="p">{</span><span class="w">
   </span><span class="n">answerQuestion</span><span class="p">(</span><span class="w">
     </span><span class="n">accountId</span><span class="p">:</span><span class="w"> </span><span class="s2">"test-accountId"</span><span class="w">
@@ -615,6 +733,40 @@ You must replace <code>yourApiKey</code> with your API key.
 <td>studentAnswers</td>
 <td>Array of String</td>
 <td>學生的答案</td>
+</tr>
+</tbody></table>
+<h3 id='response-3'>Response</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>nextQuestionId</td>
+<td>string</td>
+<td>下一題考題的 Id</td>
+</tr>
+<tr>
+<td>remainingNumOfQuestion</td>
+<td>Int</td>
+<td>當前測驗剩下題數</td>
+</tr>
+<tr>
+<td>nextLevel</td>
+<td>string</td>
+<td>下一題考題的難度</td>
+</tr>
+<tr>
+<td>achievedLevel</td>
+<td>string</td>
+<td>學生達到的程度</td>
+</tr>
+<tr>
+<td>examStatus</td>
+<td>enum</td>
+<td>當前測驗的狀態</td>
 </tr>
 </tbody></table>
 <h2 id='exams-query'>Exams - Query</h2><div class="highlight"><pre class="highlight graphql tab-graphql"><code><span class="k">query</span><span class="w"> </span><span class="n">exams</span><span class="w"> </span><span class="p">{</span><span class="w">
@@ -745,10 +897,88 @@ You must replace <code>yourApiKey</code> with your API key.
 <td>學生的答案</td>
 </tr>
 </tbody></table>
+<h3 id='response-4'>Response</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>accountId</td>
+<td>string</td>
+<td>登入帳號 ID</td>
+</tr>
+<tr>
+<td>sk</td>
+<td>Int</td>
+<td>測驗的 sort key</td>
+</tr>
+<tr>
+<td>nextQuestionId</td>
+<td>string</td>
+<td>下一題考題的 Id</td>
+</tr>
+<tr>
+<td>questionDetails</td>
+<td>AWSJSON</td>
+<td>當前測驗的考試細節，包含學生選擇的答案與正確答案</td>
+</tr>
+<tr>
+<td>remainingNumOfQuestion</td>
+<td>Int</td>
+<td>當前測驗剩下題數</td>
+</tr>
+<tr>
+<td>startTime</td>
+<td>Int</td>
+<td>當前測驗的開始時間</td>
+</tr>
+<tr>
+<td>status</td>
+<td>enum</td>
+<td>當前測驗的狀態</td>
+</tr>
+<tr>
+<td>totalNumOfQuestion</td>
+<td>Int</td>
+<td>當前測驗總共的題數態</td>
+</tr>
+<tr>
+<td>achievedLevel</td>
+<td>String</td>
+<td>學生達到的程度</td>
+</tr>
+<tr>
+<td>type</td>
+<td>enum</td>
+<td>當前測驗的種類</td>
+</tr>
+</tbody></table>
 <h1 id='errors'>Errors</h1>
 <aside class="notice">
 Dahua GraphQL API 並不會回傳 4XX 或 5XX error.
 </aside>
+<h3 id='response'>Response</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>message</td>
+<td>string</td>
+<td>Error 訊息</td>
+</tr>
+<tr>
+<td>error</td>
+<td>boolean</td>
+<td>是否有 Error</td>
+</tr>
+</tbody></table>
 
 <blockquote>
 <p>如果有 Error 會回傳以下 JSON，並顯示原因，</p>
