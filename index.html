@@ -479,9 +479,19 @@ You must replace <code>yourApiKey</code> with your API key.
 </tr>
 </thead><tbody>
 <tr>
-<td>startTime</td>
+<td>accountId</td>
 <td>string</td>
 <td>登入帳號 ID</td>
+</tr>
+<tr>
+<td>sk</td>
+<td>string</td>
+<td>當前測驗的 sort key</td>
+</tr>
+<tr>
+<td>startTime</td>
+<td>string</td>
+<td>當前測驗的開始時間</td>
 </tr>
 <tr>
 <td>nextQuestionNumber</td>
@@ -556,8 +566,8 @@ You must replace <code>yourApiKey</code> with your API key.
           </span><span class="nl">"level"</span><span class="p">:</span><span class="w"> </span><span class="s2">"TOCFL1, HSK2"</span><span class="p">,</span><span class="w">
           </span><span class="nl">"sk"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1000000021"</span><span class="p">,</span><span class="w">
           </span><span class="nl">"HSKLevel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2"</span><span class="p">,</span><span class="w">
-          </span><span class="nl">"questionId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"TOCFL1:HSK2:SA|1000000021"</span><span class="p">,</span><span class="w">
           </span><span class="nl">"TocflLevel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"questionId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"TOCFL1:HSK2:SA|1000000021"</span><span class="p">,</span><span class="w">
           </span><span class="nl">"question"</span><span class="p">:</span><span class="w"> </span><span class="s2">"这种鱼___年春天最多，男人们会一起搭船去海上找鱼。"</span><span class="p">,</span><span class="w">
           </span><span class="nl">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"这种鱼___年春天最多，男人们会一起搭船去海上找鱼。"</span><span class="p">,</span><span class="w">
           </span><span class="nl">"source"</span><span class="p">:</span><span class="w"> </span><span class="s2">"TOCFL考題"</span><span class="p">,</span><span class="w">
@@ -622,14 +632,14 @@ You must replace <code>yourApiKey</code> with your API key.
 <td>考題的程度 Id</td>
 </tr>
 <tr>
-<td>sk</td>
-<td>string</td>
-<td>考題的 sort key</td>
-</tr>
-<tr>
 <td>level</td>
 <td>string</td>
 <td>考題的程度 (<code>TOCFL1, HSK2</code>)</td>
+</tr>
+<tr>
+<td>sk</td>
+<td>string</td>
+<td>考題的 sort key</td>
 </tr>
 <tr>
 <td>HSKLevel</td>
