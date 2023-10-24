@@ -43,6 +43,7 @@ Dahua APIs，目前只有第一版本的考試 APIs，用來幫學生做分級�
 ```
 
 Dahua GraphQL API 要求每一個 request 必須要有未過期的 API KEY.
+
 API KEY 每一年需要更新一次 (找 Wilson 拿 API KEY.)。
 
 `x-api-key: yourApiKey`
