@@ -135,7 +135,9 @@ startExam mutation 會開啟一個新的考試，一個學生可以有多個考�
 
 | Parameter              | type    | Description                                              |
 | ---------------------- | ------- | -------------------------------------------------------- |
-| startTime              | string  | 登入帳號 ID                                              |
+| accountId              | string  | 登入帳號 ID                                              |
+| sk                     | string  | 當前測驗的 sort key                                      |
+| startTime              | string  | 當前測驗的開始時間                                       |
 | nextQuestionNumber     | Int     | 下一題的題號 (1, 2, 3, 4...)                             |
 | nextQuestionId         | string  | 下一題的題目 ID                                          |
 | status                 | enum    | 考試狀態(目前只有`IN_PROGRESS`, `COMPLETED`, `CANCELED`) |
@@ -181,8 +183,8 @@ query questions {
           "level": "TOCFL1, HSK2",
           "sk": "1000000021",
           "HSKLevel": "2",
-          "questionId": "TOCFL1:HSK2:SA|1000000021",
           "TocflLevel": "1",
+          "questionId": "TOCFL1:HSK2:SA|1000000021",
           "question": "这种鱼___年春天最多，男人们会一起搭船去海上找鱼。",
           "reference": "这种鱼___年春天最多，男人们会一起搭船去海上找鱼。",
           "source": "TOCFL考題",
@@ -216,8 +218,8 @@ Questions query API 可以根據 input parameters 回傳一個或是多個考題
 | Parameter  | type    | Description                                      |
 | ---------- | ------- | ------------------------------------------------ |
 | levelId    | string  | 考題的程度 Id                                    |
-| sk         | string  | 考題的 sort key                                  |
 | level      | string  | 考題的程度 (`TOCFL1, HSK2`)                      |
+| sk         | string  | 考題的 sort key                                  |
 | HSKLevel   | string  | HSK 程度                                         |
 | TocflLevel | string  | Tocf 程度                                        |
 | questionId | string  | 考題 ID，這是唯一的                              |
