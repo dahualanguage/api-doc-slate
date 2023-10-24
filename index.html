@@ -313,7 +313,7 @@
         <ul class="search-results"></ul>
       <ul id="toc" class="toc-list-h1">
           <li>
-            <a href="#introduction" class="toc-h1 toc-link" data-title="Introduction">Introduction</a>
+            <a href="#getting-started" class="toc-h1 toc-link" data-title="Getting started">Getting started</a>
               <ul class="toc-list-h2">
                   <li>
                     <a href="#dev-endpoint" class="toc-h2 toc-link" data-title="測試機(dev) endpoint:">測試機(dev) endpoint:</a>
@@ -325,6 +325,9 @@
           </li>
           <li>
             <a href="#authentication" class="toc-h1 toc-link" data-title="Authentication">Authentication</a>
+          </li>
+          <li>
+            <a href="#time" class="toc-h1 toc-link" data-title="Time">Time</a>
           </li>
           <li>
             <a href="#exam" class="toc-h1 toc-link" data-title="Exam">Exam</a>
@@ -340,6 +343,9 @@
                   </li>
                   <li>
                     <a href="#exams-query" class="toc-h2 toc-link" data-title="Exams - Query">Exams - Query</a>
+                  </li>
+                  <li>
+                    <a href="#cancel-exam-mutation" class="toc-h2 toc-link" data-title="Cancel Exam - Mutation">Cancel Exam - Mutation</a>
                   </li>
               </ul>
           </li>
@@ -360,8 +366,13 @@
     <div class="page-wrapper">
       <div class="dark-box"></div>
       <div class="content">
-        <h1 id='introduction'>Introduction</h1>
-<p>Dahua APIs，目前只有第一版本的考試 APIs，用來幫學生做分級測驗，預計未來會加上更多 APIs.</p>
+        <h1 id='getting-started'>Getting started</h1>
+<p>Dahua APIs，目前採用 <a href="https://graphql.org/">GraphQL</a> 的技術，可以讓 Client 端比較有彈性的選擇需要什麼資料，可以避免資源浪費。
+目前只有第一版本的考試 APIs，用來幫學生做分級測驗，預計未來會加上更多 APIs。</p>
+
+<p>以下是 &quot;分級測驗 API&quot; 的流程圖。</p>
+
+<p><img src="images/exam-0bb2414a.svg" alt="分級測驗 API" /></p>
 <h2 id='dev-endpoint'>測試機(dev) endpoint:</h2>
 <p><code>https://bmxybfldb5bjdickj2z5gtm2ui.appsync-api.ap-southeast-1.amazonaws.com/graphql</code></p>
 <h2 id='prod-endpoint'>正式機(prod) endpoint:</h2>
@@ -376,13 +387,15 @@
 </span></code></pre></div>
 <p>Dahua GraphQL API 要求每一個 request 必須要有未過期的 API KEY.</p>
 
-<p>API KEY 每一年需要更新一次 (找 Wilson 拿 API KEY.)。</p>
+<p>API KEY 每一年需要更新一次 (找 Wilson 拿 API KEY.)</p>
 
 <p><code>x-api-key: yourApiKey</code></p>
 
 <aside class="notice">
 You must replace <code>yourApiKey</code> with your API key.
 </aside>
+<h1 id='time'>Time</h1>
+<p>因為用戶可能來自世界各地，所以在這個系統中的所有 <code>startTime</code> 都是 <a href="https://www.epochconverter.com/">epoch timestamp</a> 的形式 (例如 <code>1698117168</code>)，Client 端要再根據用戶的時區轉換時間。</p>
 <h1 id='exam'>Exam</h1><h2 id='start-exam-mutation'>Start Exam - Mutation</h2><div class="highlight"><pre class="highlight graphql tab-graphql"><code><span class="k">mutation</span><span class="w"> </span><span class="n">startExam</span><span class="w"> </span><span class="p">{</span><span class="w">
   </span><span class="n">startExam</span><span class="p">(</span><span class="n">accountId</span><span class="p">:</span><span class="w"> </span><span class="s2">"test-accountId"</span><span class="p">,</span><span class="w"> </span><span class="n">examType</span><span class="p">:</span><span class="w"> </span><span class="n">DETERMINE_LEVEL</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
     </span><span class="n">error</span><span class="w">
@@ -865,8 +878,12 @@ You must replace <code>yourApiKey</code> with your API key.
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
-<p>Exam query 可以根據 input parameters 回傳學生的 &quot;一個&quot; 或 &quot;多個&quot; 考題歷史紀錄。
-<code>withDetails</code> 預設為 <code>false</code>(API 響應速度較快)，當需要取得學生的作答記錄時，在把 <code>withDetails</code> 設定為 <code>true</code>。</p>
+<p>Exam query 可以根據 input parameters 回傳學生的 &quot;一個&quot; 或 &quot;多個&quot; 考題歷史紀錄。</p>
+
+<ol>
+<li> 當你只提供 <code>accountId</code> 的情況下，Exam API 會回傳這個登錄帳號下 &quot;所有&quot; 的測驗歷史紀錄。</li>
+<li> 當你提通 <code>accountId</code> + <code>sk</code> 的情況下，Exam API 會回傳這個登錄帳號下 &quot;一個&quot; 測驗記錄。</li>
+</ol>
 
 <p>比較建議的做法是，可以先不傳<code>withDetails</code>(預設為<code>false</code>)，並且拿到學生的多個測驗歷史後，在讓學生點選某一個測驗，這時候在把 <code>withDetails</code>設定為<code>true</code> 並且傳(<code>accountId</code> + <code>sk</code>(學生選中的 sk))給 Exam API，這時 Exam API 就會把所有測驗細節回傳給學生。</p>
 <h3 id='mutation-input-parameters-3'>Mutation Input Parameters</h3>
@@ -898,6 +915,10 @@ You must replace <code>yourApiKey</code> with your API key.
 <td>學生的答案</td>
 </tr>
 </tbody></table>
+
+<aside class="success">
+ <code>withDetails</code> 預設為 <code>false</code> (API 響應速度較快)，當需要取得學生的作答記錄時，在把 <code>withDetails</code> 設定為 <code>true</code>。
+</aside>
 <h3 id='response-4'>Response</h3>
 <table><thead>
 <tr>
@@ -913,7 +934,7 @@ You must replace <code>yourApiKey</code> with your API key.
 </tr>
 <tr>
 <td>sk</td>
-<td>Int</td>
+<td>string</td>
 <td>測驗的 sort key</td>
 </tr>
 <tr>
@@ -957,6 +978,8 @@ You must replace <code>yourApiKey</code> with your API key.
 <td>當前測驗的種類</td>
 </tr>
 </tbody></table>
+<h2 id='cancel-exam-mutation'>Cancel Exam - Mutation</h2>
+<p>開發中 🛠️ ～～ 以後再補上</p>
 <h1 id='errors'>Errors</h1>
 <aside class="notice">
 Dahua GraphQL API 並不會回傳 4XX 或 5XX error.
