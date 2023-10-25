@@ -80,7 +80,13 @@ Also, thanks to [Sauce Labs](http://saucelabs.com) for sponsoring the developmen
 # Deploy
 
 ```
-./deploy.sh
+ssh -T git@github-dahualanguage; eval '$(ssh-agent -s)'; ssh-add ~/.ssh/id_rsa_github_dahua; ./deploy.sh
+```
+
+# Push
+
+```
+ssh -T git@github-dahualanguage; eval '$(ssh-agent -s)'; ssh-add ~/.ssh/id_rsa_github_dahua; git push
 ```
 
 # Run locally and visit http://localhost:4567/#introduction

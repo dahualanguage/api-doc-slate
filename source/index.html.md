@@ -5,7 +5,6 @@ language_tabs: # must be one of https://github.com/rouge-ruby/rouge/wiki/List-of
   - graphql
 
 toc_footers:
-  - <a href='#'>Sign Up for a Developer Key</a>
   - <a href='https://github.com/slatedocs/slate'>Documentation Powered by Slate</a>
 
 includes:
@@ -39,7 +38,7 @@ Dahua APIs，目前採用 [GraphQL](https://graphql.org/) 的技術，可以讓 
 
 # Authentication
 
-> To authorize, use below api key:
+> 請把以下這個放到 GraphQL Query/Mutation 的 Headers 裡面
 
 ```graphql
 {
@@ -49,12 +48,10 @@ Dahua APIs，目前採用 [GraphQL](https://graphql.org/) 的技術，可以讓 
 
 Dahua GraphQL API 要求每一個 request 必須要有未過期的 API KEY.
 
-API KEY 每一年需要更新一次 (找 Wilson 拿 API KEY.)
-
 `x-api-key: yourApiKey`
 
 <aside class="notice">
-You must replace <code>yourApiKey</code> with your API key.
+API KEY 每一年需要更新一次 (找 Wilson 拿 API KEY.)
 </aside>
 
 # Time
@@ -211,19 +208,20 @@ Questions query API 可以根據 input parameters 回傳一個或是多個考題
 | skFrom (optional)     | string | 起始 sort key                                                     |
 | skTo (optional)       | string | 最終 sort key                                                     |
 
-<aside class="warning">目前暫時不用理會 <code>levelId</code>, <code>sk</code>, <code>skFrom</code>, <code>skTo</code> (正在開發中...)</aside>
+<aside class="warning">目前暫時不用理會 <code>levelId</code>, <code>sk</code>, <code>skFrom</code>, <code>skTo</code> (正在開發中 🛠️ )</aside>
 
 ### Response
 
 | Parameter  | type    | Description                                      |
 | ---------- | ------- | ------------------------------------------------ |
 | levelId    | string  | 考題的程度 Id                                    |
-| level      | string  | 考題的程度 (`TOCFL1, HSK2`)                      |
+| level      | string  | 考題的程度 (`TOCFL1, HSK2`, `TOCFL2, HSK3`...)   |
 | sk         | string  | 考題的 sort key                                  |
 | HSKLevel   | string  | HSK 程度                                         |
 | TocflLevel | string  | Tocf 程度                                        |
 | questionId | string  | 考題 ID，這是唯一的                              |
-| reference  | string  | 當前測驗總共的題數                               |
+| question   | string  | 考題題目                                         |
+| reference  | string  | 考題的參考(例如: 閱讀測驗的文章)                 |
 | source     | string  | 當前測驗的考試細節，包含學生選擇的答案與正確答案 |
 | type       | enum    | 考題的總類，目前有(單選題`SA`, 多選題`MA`)       |
 | options    | AWSJSON | 這是一個包含所有選項的 JSON                      |
@@ -290,18 +288,18 @@ Answer Question mutation 可以讓學生回答考題。
 
 ### Mutation Input Parameters
 
-| Parameter      | type            | Description     |
-| -------------- | --------------- | --------------- |
-| accountId      | string          | 登入帳號 ID     |
-| sk             | string          | 考試的 sort key |
-| questionId     | string          | 題目 ID         |
-| studentAnswers | Array of String | 學生的答案      |
+| Parameter      | type            | Description                  |
+| -------------- | --------------- | ---------------------------- |
+| accountId      | string          | 登入帳號 ID                  |
+| sk             | string          | 考試的 sort key              |
+| questionId     | string          | 題目 ID                      |
+| studentAnswers | Array of String | 學生的答案 (`['A', 'C']`...) |
 
 ### Response
 
 | Parameter              | type   | Description      |
 | ---------------------- | ------ | ---------------- |
-| nextQuestionId         | string | 下一題考題的 Id  |
+| nextQuestionId         | string | 下一題考題的 ID  |
 | remainingNumOfQuestion | Int    | 當前測驗剩下題數 |
 | nextLevel              | string | 下一題考題的難度 |
 | achievedLevel          | string | 學生達到的程度   |
@@ -413,7 +411,7 @@ Exam query 可以根據 input parameters 回傳學生的 "一個" 或 "多個" �
 1.  當你只提供 `accountId` 的情況下，Exam API 會回傳這個登錄帳號下 "所有" 的測驗歷史紀錄。
 2.  當你提通 `accountId` + `sk` 的情況下，Exam API 會回傳這個登錄帳號下 "一個" 測驗記錄。
 
-比較建議的做法是，可以先不傳`withDetails`(預設為`false`)，並且拿到學生的多個測驗歷史後，在讓學生點選某一個測驗，這時候在把 `withDetails`設定為`true` 並且傳(`accountId` + `sk`(學生選中的 sk))給 Exam API，這時 Exam API 就會把所有測驗細節回傳給學生。
+比較推薦的做法是，可以先不傳`withDetails`(預設為`false`)，並且拿到學生的多個測驗歷史後，在讓學生點選某一個測驗，這時候在把 `withDetails`設定為`true` 並且傳(`accountId` + `sk`(學生選中的 sk))給 Exam API，這時 Exam API 就會把所有測驗細節回傳給學生。
 
 ### Mutation Input Parameters
 
@@ -425,7 +423,7 @@ Exam query 可以根據 input parameters 回傳學生的 "一個" 或 "多個" �
 | withDetails (預設為 false) | boolean | 學生的答案                                   |
 
 <aside class="success">
- <code>withDetails</code> 預設為 <code>false</code> (API 響應速度較快)，當需要取得學生的作答記錄時，在把 <code>withDetails</code> 設定為 <code>true</code>。
+ 注意 - <code>withDetails</code> 預設為 <code>false</code> (API 響應速度較快)，當需要取得學生的作答記錄時，在把 <code>withDetails</code> 設定為 <code>true</code>。
 </aside>
 
 ### Response
