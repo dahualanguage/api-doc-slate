@@ -286,7 +286,7 @@
   color: #859900;
 }
     </style>
-    <link href="stylesheets/screen-9c19b03a.css" rel="stylesheet" media="screen" />
+    <link href="stylesheets/screen-50a9a2fd.css" rel="stylesheet" media="screen" />
     <link href="stylesheets/print-966d6edc.css" rel="stylesheet" media="print" />
       <script src="javascripts/all-b12a2749.js"></script>
 
@@ -359,7 +359,6 @@
           </li>
       </ul>
         <ul class="toc-footer">
-            <li><a href='#'>Sign Up for a Developer Key</a></li>
             <li><a href='https://github.com/slatedocs/slate'>Documentation Powered by Slate</a></li>
         </ul>
     </div>
@@ -379,7 +378,7 @@
 <p><code>還沒架，預計明年初開始架</code> 😆</p>
 <h1 id='authentication'>Authentication</h1>
 <blockquote>
-<p>To authorize, use below api key:</p>
+<p>請把以下這個放到 GraphQL Query/Mutation 的 Headers 裡面</p>
 </blockquote>
 <div class="highlight"><pre class="highlight graphql tab-graphql"><code><span class="p">{</span><span class="w">
   </span><span class="err">"</span><span class="n">x</span><span class="err">-</span><span class="n">api</span><span class="err">-</span><span class="n">key</span><span class="err">":</span><span class="w"> </span><span class="err">"</span><span class="n">yourApiKey</span><span class="err">"</span><span class="w">
@@ -387,12 +386,10 @@
 </span></code></pre></div>
 <p>Dahua GraphQL API 要求每一個 request 必須要有未過期的 API KEY.</p>
 
-<p>API KEY 每一年需要更新一次 (找 Wilson 拿 API KEY.)</p>
-
 <p><code>x-api-key: yourApiKey</code></p>
 
 <aside class="notice">
-You must replace <code>yourApiKey</code> with your API key.
+API KEY 每一年需要更新一次 (找 Wilson 拿 API KEY.)
 </aside>
 <h1 id='time'>Time</h1>
 <p>因為用戶可能來自世界各地，所以在這個系統中的所有 <code>startTime</code> 都是 <a href="https://www.epochconverter.com/">epoch timestamp</a> 的形式 (例如 <code>1698117168</code>)，Client 端要再根據用戶的時區轉換時間。</p>
@@ -617,7 +614,7 @@ You must replace <code>yourApiKey</code> with your API key.
 </tr>
 </tbody></table>
 
-<aside class="warning">目前暫時不用理會 <code>levelId</code>, <code>sk</code>, <code>skFrom</code>, <code>skTo</code> (正在開發中...)</aside>
+<aside class="warning">目前暫時不用理會 <code>levelId</code>, <code>sk</code>, <code>skFrom</code>, <code>skTo</code> (正在開發中 🛠️ )</aside>
 <h3 id='response-2'>Response</h3>
 <table><thead>
 <tr>
@@ -634,7 +631,7 @@ You must replace <code>yourApiKey</code> with your API key.
 <tr>
 <td>level</td>
 <td>string</td>
-<td>考題的程度 (<code>TOCFL1, HSK2</code>)</td>
+<td>考題的程度 (<code>TOCFL1, HSK2</code>, <code>TOCFL2, HSK3</code>...)</td>
 </tr>
 <tr>
 <td>sk</td>
@@ -657,9 +654,14 @@ You must replace <code>yourApiKey</code> with your API key.
 <td>考題 ID，這是唯一的</td>
 </tr>
 <tr>
+<td>question</td>
+<td>string</td>
+<td>考題題目</td>
+</tr>
+<tr>
 <td>reference</td>
 <td>string</td>
-<td>當前測驗總共的題數</td>
+<td>考題的參考(例如: 閱讀測驗的文章)</td>
 </tr>
 <tr>
 <td>source</td>
@@ -756,7 +758,7 @@ You must replace <code>yourApiKey</code> with your API key.
 <tr>
 <td>studentAnswers</td>
 <td>Array of String</td>
-<td>學生的答案</td>
+<td>學生的答案 (<code>[&#39;A&#39;, &#39;C&#39;]</code>...)</td>
 </tr>
 </tbody></table>
 <h3 id='response-3'>Response</h3>
@@ -770,7 +772,7 @@ You must replace <code>yourApiKey</code> with your API key.
 <tr>
 <td>nextQuestionId</td>
 <td>string</td>
-<td>下一題考題的 Id</td>
+<td>下一題考題的 ID</td>
 </tr>
 <tr>
 <td>remainingNumOfQuestion</td>
@@ -895,7 +897,7 @@ You must replace <code>yourApiKey</code> with your API key.
 <li> 當你提通 <code>accountId</code> + <code>sk</code> 的情況下，Exam API 會回傳這個登錄帳號下 &quot;一個&quot; 測驗記錄。</li>
 </ol>
 
-<p>比較建議的做法是，可以先不傳<code>withDetails</code>(預設為<code>false</code>)，並且拿到學生的多個測驗歷史後，在讓學生點選某一個測驗，這時候在把 <code>withDetails</code>設定為<code>true</code> 並且傳(<code>accountId</code> + <code>sk</code>(學生選中的 sk))給 Exam API，這時 Exam API 就會把所有測驗細節回傳給學生。</p>
+<p>比較推薦的做法是，可以先不傳<code>withDetails</code>(預設為<code>false</code>)，並且拿到學生的多個測驗歷史後，在讓學生點選某一個測驗，這時候在把 <code>withDetails</code>設定為<code>true</code> 並且傳(<code>accountId</code> + <code>sk</code>(學生選中的 sk))給 Exam API，這時 Exam API 就會把所有測驗細節回傳給學生。</p>
 <h3 id='mutation-input-parameters-3'>Mutation Input Parameters</h3>
 <table><thead>
 <tr>
@@ -927,7 +929,7 @@ You must replace <code>yourApiKey</code> with your API key.
 </tbody></table>
 
 <aside class="success">
- <code>withDetails</code> 預設為 <code>false</code> (API 響應速度較快)，當需要取得學生的作答記錄時，在把 <code>withDetails</code> 設定為 <code>true</code>。
+ 注意 - <code>withDetails</code> 預設為 <code>false</code> (API 響應速度較快)，當需要取得學生的作答記錄時，在把 <code>withDetails</code> 設定為 <code>true</code>。
 </aside>
 <h3 id='response-4'>Response</h3>
 <table><thead>
