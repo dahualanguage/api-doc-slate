@@ -345,7 +345,7 @@
                     <a href="#exams-query" class="toc-h2 toc-link" data-title="Exams - Query">Exams - Query</a>
                   </li>
                   <li>
-                    <a href="#cancel-exam-mutation" class="toc-h2 toc-link" data-title="Cancel Exam - Mutation">Cancel Exam - Mutation</a>
+                    <a href="#edit-exam-mutation" class="toc-h2 toc-link" data-title="Edit Exam - Mutation">Edit Exam - Mutation</a>
                   </li>
               </ul>
           </li>
@@ -990,8 +990,77 @@ API KEY 每一年需要更新一次 (找 Wilson 拿 API KEY.)
 <td>當前測驗的種類</td>
 </tr>
 </tbody></table>
-<h2 id='cancel-exam-mutation'>Cancel Exam - Mutation</h2>
-<p>開發中 🛠️ ～～ 以後再補上</p>
+<h2 id='edit-exam-mutation'>Edit Exam - Mutation</h2><div class="highlight"><pre class="highlight graphql tab-graphql"><code><span class="k">mutation</span><span class="w"> </span><span class="n">editExam</span><span class="w"> </span><span class="p">{</span><span class="w">
+  </span><span class="n">editExam</span><span class="p">(</span><span class="w">
+    </span><span class="n">accountId</span><span class="p">:</span><span class="w"> </span><span class="s2">"test-accountId"</span><span class="w">
+    </span><span class="n">sk</span><span class="p">:</span><span class="w"> </span><span class="s2">"exam:DETERMINE_LEVEL:ts:1698348846"</span><span class="w">
+    </span><span class="n">status</span><span class="p">:</span><span class="w"> </span><span class="n">CANCELED</span><span class="w">
+  </span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="n">error</span><span class="w">
+    </span><span class="n">message</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+<p>以上的 editExam mutation 會回傳以下 JSON:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"editExam"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"error"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Edited the exam successfully."</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>Edit exam mutation 可以修改測驗，目前只允許修改 <code>status</code>，未來可能會加上更多可被修改的項目。</p>
+
+<p>學生可以把 <code>status</code> 設成 <code>CANCELED</code> 取消考試，被取消的考試會在七天後從資料庫中永久刪除。</p>
+
+<p>考試被學生取消的七天內，學生可以把 <code>status</code> 從 <code>CANCELED</code> 設成 <code>IN_PROGRESS</code> 把考試重新激活並繼續作答。</p>
+<h3 id='mutation-input-parameters-4'>Mutation Input Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>accountId (required)</td>
+<td>string</td>
+<td>登入帳號 ID</td>
+</tr>
+<tr>
+<td>sk (required)</td>
+<td>string</td>
+<td>測驗的 sort key</td>
+</tr>
+<tr>
+<td>status</td>
+<td>enum</td>
+<td>想要改成的狀態(目前只有<code>IN_PROGRESS</code>, <code>COMPLETED</code>, <code>CANCELED</code>)</td>
+</tr>
+</tbody></table>
+<h3 id='response-5'>Response</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>error</td>
+<td>boolean</td>
+<td>是否有 Error</td>
+</tr>
+<tr>
+<td>message</td>
+<td>string</td>
+<td>Error 訊息</td>
+</tr>
+</tbody></table>
 <h1 id='errors'>Errors</h1>
 <aside class="notice">
 Dahua GraphQL API 並不會回傳 4XX 或 5XX error.
