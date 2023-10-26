@@ -441,6 +441,51 @@ Exam query 可以根據 input parameters 回傳學生的 "一個" 或 "多個" �
 | achievedLevel          | String  | 學生達到的程度                                   |
 | type                   | enum    | 當前測驗的種類                                   |
 
-## Cancel Exam - Mutation
+## Edit Exam - Mutation
 
-開發中 🛠️ ～～ 以後再補上
+```graphql
+mutation editExam {
+  editExam(
+    accountId: "test-accountId"
+    sk: "exam:DETERMINE_LEVEL:ts:1698348846"
+    status: CANCELED
+  ) {
+    error
+    message
+  }
+}
+```
+
+> 以上的 editExam mutation 會回傳以下 JSON:
+
+```json
+{
+  "data": {
+    "editExam": {
+      "error": false,
+      "message": "Edited the exam successfully."
+    }
+  }
+}
+```
+
+Edit exam mutation 可以修改測驗，目前只允許修改 `status`，未來可能會加上更多可被修改的項目。
+
+學生可以把 `status` 設成 `CANCELED` 取消考試，被取消的考試會在七天後從資料庫中永久刪除。
+
+考試被學生取消的七天內，學生可以把 `status` 從 `CANCELED` 設成 `IN_PROGRESS` 把考試重新激活並繼續作答。
+
+### Mutation Input Parameters
+
+| Parameter            | type   | Description                                                    |
+| -------------------- | ------ | -------------------------------------------------------------- |
+| accountId (required) | string | 登入帳號 ID                                                    |
+| sk (required)        | string | 測驗的 sort key                                                |
+| status               | enum   | 想要改成的狀態(目前只有`IN_PROGRESS`, `COMPLETED`, `CANCELED`) |
+
+### Response
+
+| Parameter | type    | Description  |
+| --------- | ------- | ------------ |
+| error     | boolean | 是否有 Error |
+| message   | string  | Error 訊息   |
