@@ -58,6 +58,50 @@ API KEY 每一年需要更新一次 (找 Wilson 拿 API KEY.)
 
 因為用戶可能來自世界各地，所以在這個系統中的所有 `startTime` 都是 [epoch timestamp](https://www.epochconverter.com/) 的形式 (例如 `1698117168`)，Client 端要再根據用戶的時區轉換時間。
 
+# Debugging
+
+所有的 APIs 都會回傳 `requestId`，如果開發過程遇到問題，可以提供 `requestId` 給大話，大話的工程師會根據 `requestId` 去檢查 logs。
+
+```graphql
+query exams {
+  exams(accountId: "test-accountId", withDetails: true) {
+    error
+    message
+    requestId
+    exams {
+      accountId
+      sk
+      startTime
+      status
+      completedTime
+    }
+  }
+}
+```
+
+> 以上的 exams query 會回傳以下 JSON，包含 requestId:
+
+```json
+{
+  "data": {
+    "exams": {
+      "error": false,
+      "message": "",
+      "requestId": "a5b92b87-d574-46d6-a7a8-1225b0b4cf51",
+      "exams": [
+        {
+          "accountId": "test-accountId",
+          "sk": "exam:DETERMINE_LEVEL:ts:1699423781",
+          "startTime": 1699423781,
+          "status": "COMPLETED",
+          "completedTime": 1699423820
+        }
+      ]
+    }
+  }
+}
+```
+
 # Exam
 
 ## Start Exam - Mutation
@@ -319,6 +363,7 @@ query exams {
       questionDetails
       remainingNumOfQuestion
       startTime
+      completedTime
       status
       totalNumOfQuestion
       achievedLevel
@@ -344,6 +389,7 @@ query exams {
           "questionDetails": null,
           "remainingNumOfQuestion": null,
           "startTime": 1698090545,
+          "completedTime": 1699423820,
           "status": "COMPLETED",
           "totalNumOfQuestion": null,
           "achievedLevel": null,
@@ -356,6 +402,7 @@ query exams {
           "questionDetails": null,
           "remainingNumOfQuestion": null,
           "startTime": 1698090652,
+          "completedTime": 1699423920,
           "status": "COMPLETED",
           "totalNumOfQuestion": null,
           "achievedLevel": null,
@@ -383,6 +430,7 @@ query exams {
           "questionDetails": "{\"1\":{\"sk\":\"1000000002\",\"correctAnswers\":[\"A\"],\"studentAnswers\":[\"A\"],\"level\":\"TOCFL1, HSK2\",\"levelId\":\"TOCFL1:HSK2:SA\",\"isCorrect\":true},\"2\":{\"sk\":\"1000000013\",\"correctAnswers\":[\"B\"],\"studentAnswers\":[\"A\"],\"level\":\"TOCFL1, HSK2\",\"levelId\":\"TOCFL1:HSK2:SA\",\"isCorrect\":false},\"3\":{\"sk\":\"1000000004\",\"correctAnswers\":[\"A\"],\"studentAnswers\":[\"A\"],\"level\":\"TOCFL1, HSK2\",\"levelId\":\"TOCFL1:HSK2:SA\",\"isCorrect\":true},\"consecutiveWrong\":0,\"consecutiveCorrect\":1}",
           "remainingNumOfQuestion": 0,
           "startTime": 1698090545,
+          "completedTime": 1699423820,
           "status": "COMPLETED",
           "totalNumOfQuestion": 3,
           "achievedLevel": "TOCFL1, HSK2",
@@ -395,6 +443,7 @@ query exams {
           "questionDetails": "{\"1\":{\"sk\":\"1000000021\",\"correctAnswers\":[\"B\"],\"studentAnswers\":[\"A\"],\"level\":\"TOCFL1, HSK2\",\"levelId\":\"TOCFL1:HSK2:SA\",\"isCorrect\":false},\"2\":{\"sk\":\"1000000017\",\"correctAnswers\":[\"A\"],\"studentAnswers\":[\"A\"],\"level\":\"TOCFL1, HSK2\",\"levelId\":\"TOCFL1:HSK2:SA\",\"isCorrect\":true},\"3\":{\"sk\":\"1000000002\",\"correctAnswers\":[\"A\"],\"studentAnswers\":[\"A\"],\"level\":\"TOCFL1, HSK2\",\"levelId\":\"TOCFL1:HSK2:SA\",\"isCorrect\":true},\"consecutiveWrong\":0,\"consecutiveCorrect\":0}",
           "remainingNumOfQuestion": 0,
           "startTime": 1698090652,
+          "completedTime": 1699423920,
           "status": "COMPLETED",
           "totalNumOfQuestion": 3,
           "achievedLevel": "TOCFL1, HSK2",
@@ -436,6 +485,7 @@ Exam query 可以根據 input parameters 回傳學生的 "一個" 或 "多個" �
 | questionDetails        | AWSJSON | 當前測驗的考試細節，包含學生選擇的答案與正確答案 |
 | remainingNumOfQuestion | Int     | 當前測驗剩下題數                                 |
 | startTime              | Int     | 當前測驗的開始時間                               |
+| completedTime          | Int     | 當前測驗的完成時間                               |
 | status                 | enum    | 當前測驗的狀態                                   |
 | totalNumOfQuestion     | Int     | 當前測驗總共的題數態                             |
 | achievedLevel          | String  | 學生達到的程度                                   |
