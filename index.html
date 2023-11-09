@@ -330,6 +330,9 @@
             <a href="#time" class="toc-h1 toc-link" data-title="Time">Time</a>
           </li>
           <li>
+            <a href="#debugging" class="toc-h1 toc-link" data-title="Debugging">Debugging</a>
+          </li>
+          <li>
             <a href="#exam" class="toc-h1 toc-link" data-title="Exam">Exam</a>
               <ul class="toc-list-h2">
                   <li>
@@ -393,7 +396,45 @@ API KEY 每一年需要更新一次 (找 Wilson 拿 API KEY.)
 </aside>
 <h1 id='time'>Time</h1>
 <p>因為用戶可能來自世界各地，所以在這個系統中的所有 <code>startTime</code> 都是 <a href="https://www.epochconverter.com/">epoch timestamp</a> 的形式 (例如 <code>1698117168</code>)，Client 端要再根據用戶的時區轉換時間。</p>
-<h1 id='exam'>Exam</h1><h2 id='start-exam-mutation'>Start Exam - Mutation</h2><div class="highlight"><pre class="highlight graphql tab-graphql"><code><span class="k">mutation</span><span class="w"> </span><span class="n">startExam</span><span class="w"> </span><span class="p">{</span><span class="w">
+<h1 id='debugging'>Debugging</h1>
+<p>所有的 APIs 都會回傳 <code>requestId</code>，如果開發過程遇到問題，可以提供 <code>requestId</code> 給大話，大話的工程師會根據 <code>requestId</code> 去檢查 logs。</p>
+<div class="highlight"><pre class="highlight graphql tab-graphql"><code><span class="k">query</span><span class="w"> </span><span class="n">exams</span><span class="w"> </span><span class="p">{</span><span class="w">
+  </span><span class="n">exams</span><span class="p">(</span><span class="n">accountId</span><span class="p">:</span><span class="w"> </span><span class="s2">"test-accountId"</span><span class="p">,</span><span class="w"> </span><span class="n">withDetails</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="n">error</span><span class="w">
+    </span><span class="n">message</span><span class="w">
+    </span><span class="n">requestId</span><span class="w">
+    </span><span class="n">exams</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="n">accountId</span><span class="w">
+      </span><span class="n">sk</span><span class="w">
+      </span><span class="n">startTime</span><span class="w">
+      </span><span class="n">status</span><span class="w">
+      </span><span class="n">completedTime</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+<p>以上的 exams query 會回傳以下 JSON，包含 requestId:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"exams"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"error"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"a5b92b87-d574-46d6-a7a8-1225b0b4cf51"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"exams"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"accountId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"test-accountId"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"sk"</span><span class="p">:</span><span class="w"> </span><span class="s2">"exam:DETERMINE_LEVEL:ts:1699423781"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"startTime"</span><span class="p">:</span><span class="w"> </span><span class="mi">1699423781</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"COMPLETED"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"completedTime"</span><span class="p">:</span><span class="w"> </span><span class="mi">1699423820</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">]</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div><h1 id='exam'>Exam</h1><h2 id='start-exam-mutation'>Start Exam - Mutation</h2><div class="highlight"><pre class="highlight graphql tab-graphql"><code><span class="k">mutation</span><span class="w"> </span><span class="n">startExam</span><span class="w"> </span><span class="p">{</span><span class="w">
   </span><span class="n">startExam</span><span class="p">(</span><span class="n">accountId</span><span class="p">:</span><span class="w"> </span><span class="s2">"test-accountId"</span><span class="p">,</span><span class="w"> </span><span class="n">examType</span><span class="p">:</span><span class="w"> </span><span class="n">DETERMINE_LEVEL</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
     </span><span class="n">error</span><span class="w">
     </span><span class="n">message</span><span class="w">
@@ -806,6 +847,7 @@ API KEY 每一年需要更新一次 (找 Wilson 拿 API KEY.)
       </span><span class="n">questionDetails</span><span class="w">
       </span><span class="n">remainingNumOfQuestion</span><span class="w">
       </span><span class="n">startTime</span><span class="w">
+      </span><span class="n">completedTime</span><span class="w">
       </span><span class="n">status</span><span class="w">
       </span><span class="n">totalNumOfQuestion</span><span class="w">
       </span><span class="n">achievedLevel</span><span class="w">
@@ -830,6 +872,7 @@ API KEY 每一年需要更新一次 (找 Wilson 拿 API KEY.)
           </span><span class="nl">"questionDetails"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
           </span><span class="nl">"remainingNumOfQuestion"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
           </span><span class="nl">"startTime"</span><span class="p">:</span><span class="w"> </span><span class="mi">1698090545</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"completedTime"</span><span class="p">:</span><span class="w"> </span><span class="mi">1699423820</span><span class="p">,</span><span class="w">
           </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"COMPLETED"</span><span class="p">,</span><span class="w">
           </span><span class="nl">"totalNumOfQuestion"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
           </span><span class="nl">"achievedLevel"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
@@ -842,6 +885,7 @@ API KEY 每一年需要更新一次 (找 Wilson 拿 API KEY.)
           </span><span class="nl">"questionDetails"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
           </span><span class="nl">"remainingNumOfQuestion"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
           </span><span class="nl">"startTime"</span><span class="p">:</span><span class="w"> </span><span class="mi">1698090652</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"completedTime"</span><span class="p">:</span><span class="w"> </span><span class="mi">1699423920</span><span class="p">,</span><span class="w">
           </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"COMPLETED"</span><span class="p">,</span><span class="w">
           </span><span class="nl">"totalNumOfQuestion"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
           </span><span class="nl">"achievedLevel"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
@@ -868,6 +912,7 @@ API KEY 每一年需要更新一次 (找 Wilson 拿 API KEY.)
           </span><span class="nl">"questionDetails"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{</span><span class="se">\"</span><span class="s2">1</span><span class="se">\"</span><span class="s2">:{</span><span class="se">\"</span><span class="s2">sk</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">1000000002</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">correctAnswers</span><span class="se">\"</span><span class="s2">:[</span><span class="se">\"</span><span class="s2">A</span><span class="se">\"</span><span class="s2">],</span><span class="se">\"</span><span class="s2">studentAnswers</span><span class="se">\"</span><span class="s2">:[</span><span class="se">\"</span><span class="s2">A</span><span class="se">\"</span><span class="s2">],</span><span class="se">\"</span><span class="s2">level</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">TOCFL1, HSK2</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">levelId</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">TOCFL1:HSK2:SA</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">isCorrect</span><span class="se">\"</span><span class="s2">:true},</span><span class="se">\"</span><span class="s2">2</span><span class="se">\"</span><span class="s2">:{</span><span class="se">\"</span><span class="s2">sk</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">1000000013</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">correctAnswers</span><span class="se">\"</span><span class="s2">:[</span><span class="se">\"</span><span class="s2">B</span><span class="se">\"</span><span class="s2">],</span><span class="se">\"</span><span class="s2">studentAnswers</span><span class="se">\"</span><span class="s2">:[</span><span class="se">\"</span><span class="s2">A</span><span class="se">\"</span><span class="s2">],</span><span class="se">\"</span><span class="s2">level</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">TOCFL1, HSK2</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">levelId</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">TOCFL1:HSK2:SA</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">isCorrect</span><span class="se">\"</span><span class="s2">:false},</span><span class="se">\"</span><span class="s2">3</span><span class="se">\"</span><span class="s2">:{</span><span class="se">\"</span><span class="s2">sk</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">1000000004</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">correctAnswers</span><span class="se">\"</span><span class="s2">:[</span><span class="se">\"</span><span class="s2">A</span><span class="se">\"</span><span class="s2">],</span><span class="se">\"</span><span class="s2">studentAnswers</span><span class="se">\"</span><span class="s2">:[</span><span class="se">\"</span><span class="s2">A</span><span class="se">\"</span><span class="s2">],</span><span class="se">\"</span><span class="s2">level</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">TOCFL1, HSK2</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">levelId</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">TOCFL1:HSK2:SA</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">isCorrect</span><span class="se">\"</span><span class="s2">:true},</span><span class="se">\"</span><span class="s2">consecutiveWrong</span><span class="se">\"</span><span class="s2">:0,</span><span class="se">\"</span><span class="s2">consecutiveCorrect</span><span class="se">\"</span><span class="s2">:1}"</span><span class="p">,</span><span class="w">
           </span><span class="nl">"remainingNumOfQuestion"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
           </span><span class="nl">"startTime"</span><span class="p">:</span><span class="w"> </span><span class="mi">1698090545</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"completedTime"</span><span class="p">:</span><span class="w"> </span><span class="mi">1699423820</span><span class="p">,</span><span class="w">
           </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"COMPLETED"</span><span class="p">,</span><span class="w">
           </span><span class="nl">"totalNumOfQuestion"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
           </span><span class="nl">"achievedLevel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"TOCFL1, HSK2"</span><span class="p">,</span><span class="w">
@@ -880,6 +925,7 @@ API KEY 每一年需要更新一次 (找 Wilson 拿 API KEY.)
           </span><span class="nl">"questionDetails"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{</span><span class="se">\"</span><span class="s2">1</span><span class="se">\"</span><span class="s2">:{</span><span class="se">\"</span><span class="s2">sk</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">1000000021</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">correctAnswers</span><span class="se">\"</span><span class="s2">:[</span><span class="se">\"</span><span class="s2">B</span><span class="se">\"</span><span class="s2">],</span><span class="se">\"</span><span class="s2">studentAnswers</span><span class="se">\"</span><span class="s2">:[</span><span class="se">\"</span><span class="s2">A</span><span class="se">\"</span><span class="s2">],</span><span class="se">\"</span><span class="s2">level</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">TOCFL1, HSK2</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">levelId</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">TOCFL1:HSK2:SA</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">isCorrect</span><span class="se">\"</span><span class="s2">:false},</span><span class="se">\"</span><span class="s2">2</span><span class="se">\"</span><span class="s2">:{</span><span class="se">\"</span><span class="s2">sk</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">1000000017</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">correctAnswers</span><span class="se">\"</span><span class="s2">:[</span><span class="se">\"</span><span class="s2">A</span><span class="se">\"</span><span class="s2">],</span><span class="se">\"</span><span class="s2">studentAnswers</span><span class="se">\"</span><span class="s2">:[</span><span class="se">\"</span><span class="s2">A</span><span class="se">\"</span><span class="s2">],</span><span class="se">\"</span><span class="s2">level</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">TOCFL1, HSK2</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">levelId</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">TOCFL1:HSK2:SA</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">isCorrect</span><span class="se">\"</span><span class="s2">:true},</span><span class="se">\"</span><span class="s2">3</span><span class="se">\"</span><span class="s2">:{</span><span class="se">\"</span><span class="s2">sk</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">1000000002</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">correctAnswers</span><span class="se">\"</span><span class="s2">:[</span><span class="se">\"</span><span class="s2">A</span><span class="se">\"</span><span class="s2">],</span><span class="se">\"</span><span class="s2">studentAnswers</span><span class="se">\"</span><span class="s2">:[</span><span class="se">\"</span><span class="s2">A</span><span class="se">\"</span><span class="s2">],</span><span class="se">\"</span><span class="s2">level</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">TOCFL1, HSK2</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">levelId</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">TOCFL1:HSK2:SA</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">isCorrect</span><span class="se">\"</span><span class="s2">:true},</span><span class="se">\"</span><span class="s2">consecutiveWrong</span><span class="se">\"</span><span class="s2">:0,</span><span class="se">\"</span><span class="s2">consecutiveCorrect</span><span class="se">\"</span><span class="s2">:0}"</span><span class="p">,</span><span class="w">
           </span><span class="nl">"remainingNumOfQuestion"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
           </span><span class="nl">"startTime"</span><span class="p">:</span><span class="w"> </span><span class="mi">1698090652</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"completedTime"</span><span class="p">:</span><span class="w"> </span><span class="mi">1699423920</span><span class="p">,</span><span class="w">
           </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"COMPLETED"</span><span class="p">,</span><span class="w">
           </span><span class="nl">"totalNumOfQuestion"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
           </span><span class="nl">"achievedLevel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"TOCFL1, HSK2"</span><span class="p">,</span><span class="w">
@@ -968,6 +1014,11 @@ API KEY 每一年需要更新一次 (找 Wilson 拿 API KEY.)
 <td>startTime</td>
 <td>Int</td>
 <td>當前測驗的開始時間</td>
+</tr>
+<tr>
+<td>completedTime</td>
+<td>Int</td>
+<td>當前測驗的完成時間</td>
 </tr>
 <tr>
 <td>status</td>
