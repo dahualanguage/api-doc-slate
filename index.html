@@ -573,7 +573,7 @@ API KEY 每一年需要更新一次 (找 Wilson 拿 API KEY.)
 </tr>
 </tbody></table>
 <h2 id='questions-query'>Questions - Query</h2><div class="highlight"><pre class="highlight graphql tab-graphql"><code><span class="k">query</span><span class="w"> </span><span class="n">questions</span><span class="w"> </span><span class="p">{</span><span class="w">
-  </span><span class="n">questions</span><span class="p">(</span><span class="n">questionId</span><span class="p">:</span><span class="w"> </span><span class="s2">"TOCFL1:HSK2:SA|1000000021"</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+  </span><span class="n">questions</span><span class="p">(</span><span class="n">questionId</span><span class="p">:</span><span class="w"> </span><span class="s2">"TOCFL1:HSK2:SA|1000000021"</span><span class="p">,</span><span class="w"> </span><span class="n">isTW</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
     </span><span class="n">questions</span><span class="w"> </span><span class="p">{</span><span class="w">
       </span><span class="n">levelId</span><span class="w">
       </span><span class="n">level</span><span class="w">
@@ -652,6 +652,11 @@ API KEY 每一年需要更新一次 (找 Wilson 拿 API KEY.)
 <td>skTo (optional)</td>
 <td>string</td>
 <td>最終 sort key</td>
+</tr>
+<tr>
+<td>isTW (optional)</td>
+<td>boolean</td>
+<td>預設為 false(回傳簡體中文)，true 回傳繁體中文</td>
 </tr>
 </tbody></table>
 
