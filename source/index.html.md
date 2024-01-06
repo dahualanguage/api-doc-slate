@@ -192,7 +192,7 @@ startExam mutation 會開啟一個新的考試，一個學生可以有多個考�
 
 ```graphql
 query questions {
-  questions(questionId: "TOCFL1:HSK2:SA|1000000021") {
+  questions(questionId: "TOCFL1:HSK2:SA|1000000021", isTW: true) {
     questions {
       levelId
       level
@@ -244,13 +244,14 @@ Questions query API 可以根據 input parameters 回傳一個或是多個考題
 
 ### Query Input Parameters
 
-| Parameter             | type   | Description                                                       |
-| --------------------- | ------ | ----------------------------------------------------------------- |
-| questionId (required) | string | 考題 ID，這是唯一的                                               |
-| levelId (optional)    | string | 程度 ID (必須配合 `sk` 或是 (`skFrom` + `skTo`))                  |
-| sk (optional)         | string | sort key，每一個程度會有多個 sort key，代表每一個程度會有多個考題 |
-| skFrom (optional)     | string | 起始 sort key                                                     |
-| skTo (optional)       | string | 最終 sort key                                                     |
+| Parameter             | type    | Description                                                       |
+| --------------------- | ------- | ----------------------------------------------------------------- |
+| questionId (required) | string  | 考題 ID，這是唯一的                                               |
+| levelId (optional)    | string  | 程度 ID (必須配合 `sk` 或是 (`skFrom` + `skTo`))                  |
+| sk (optional)         | string  | sort key，每一個程度會有多個 sort key，代表每一個程度會有多個考題 |
+| skFrom (optional)     | string  | 起始 sort key                                                     |
+| skTo (optional)       | string  | 最終 sort key                                                     |
+| isTW (optional)       | boolean | 預設為 false(回傳簡體中文)，true 回傳繁體中文                     |
 
 <aside class="warning">目前暫時不用理會 <code>levelId</code>, <code>sk</code>, <code>skFrom</code>, <code>skTo</code> (正在開發中 🛠️ )</aside>
 
