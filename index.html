@@ -321,6 +321,12 @@
                   <li>
                     <a href="#prod-endpoint" class="toc-h2 toc-link" data-title="正式機(prod) endpoint:">正式機(prod) endpoint:</a>
                   </li>
+                  <li>
+                    <a href="#api" class="toc-h2 toc-link" data-title="分級測驗 API">分級測驗 API</a>
+                  </li>
+                  <li>
+                    <a href="#api-2" class="toc-h2 toc-link" data-title="文章口語練習 API">文章口語練習 API</a>
+                  </li>
               </ul>
           </li>
           <li>
@@ -370,15 +376,24 @@
       <div class="content">
         <h1 id='getting-started'>Getting started</h1>
 <p>Dahua APIs，目前採用 <a href="https://graphql.org/">GraphQL</a> 的技術，可以讓 Client 端比較有彈性的選擇需要什麼資料，可以避免資源浪費。
-目前只有第一版本的考試 APIs，用來幫學生做分級測驗，預計未來會加上更多 APIs。</p>
+目前有兩種 APIs：</p>
 
-<p>以下是 &quot;分級測驗 API&quot; 的流程圖。</p>
-
-<p><img src="images/exam-0bb2414a.svg" alt="分級測驗 API" /></p>
+<ol>
+<li>分級測驗的考試 API</li>
+<li>文章口語練習 API</li>
+</ol>
 <h2 id='dev-endpoint'>測試機(dev) endpoint:</h2>
 <p><code>https://bmxybfldb5bjdickj2z5gtm2ui.appsync-api.ap-southeast-1.amazonaws.com/graphql</code></p>
 <h2 id='prod-endpoint'>正式機(prod) endpoint:</h2>
 <p><code>還沒架，預計明年初開始架</code> 😆</p>
+<h2 id='api'>分級測驗 API</h2>
+<p>以下是 &quot;分級測驗 API&quot; 的流程圖。</p>
+
+<p><img src="images/exam-0bb2414a.svg" alt="分級測驗 API" /></p>
+<h2 id='api-2'>文章口語練習 API</h2>
+<p>以下是 &quot;文章口語練習 API&quot; 的流程圖，藍色虛線代表異步(async)的在後端執行，冠富只有第三步需要直接上傳 mp3 檔到 AWS S3，其他步驟都只要跟 API 串接即可。</p>
+
+<p><img src="images/speechPractice-10bb99d5.svg" alt="分級測驗 API" /></p>
 <h1 id='authentication'>Authentication</h1>
 <blockquote>
 <p>請把以下這個放到 GraphQL Query/Mutation 的 Headers 裡面</p>
