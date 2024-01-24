@@ -22,11 +22,10 @@ meta:
 # Getting started
 
 Dahua APIs，目前採用 [GraphQL](https://graphql.org/) 的技術，可以讓 Client 端比較有彈性的選擇需要什麼資料，可以避免資源浪費。
-目前只有第一版本的考試 APIs，用來幫學生做分級測驗，預計未來會加上更多 APIs。
+目前有兩種 APIs：
 
-以下是 "分級測驗 API" 的流程圖。
-
-![分級測驗 API](./images/exam.svg)
+1. 分級測驗的考試 API
+2. 文章口語練習 API
 
 ## 測試機(dev) endpoint:
 
@@ -35,6 +34,18 @@ Dahua APIs，目前採用 [GraphQL](https://graphql.org/) 的技術，可以讓 
 ## 正式機(prod) endpoint:
 
 `還沒架，預計明年初開始架` 😆
+
+## 分級測驗 API
+
+以下是 "分級測驗 API" 的流程圖。
+
+![分級測驗 API](./images/exam.svg)
+
+## 文章口語練習 API
+
+以下是 "文章口語練習 API" 的流程圖，藍色虛線代表異步(async)的在後端執行，冠富只有第三步需要直接上傳 mp3 檔到 AWS S3，其他步驟都只要跟 API 串接即可。
+
+![分級測驗 API](./images/speechPractice.svg)
 
 # Authentication
 

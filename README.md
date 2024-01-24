@@ -97,6 +97,8 @@ bundle exec middleman server
 
 PlantText
 
+## 考試 API 流程圖
+
 ```
 @startuml
 
@@ -126,6 +128,56 @@ note over Client: 4. 回顧測驗結果，或是測驗歷史紀錄
 Client -> AWS: getExams(accountId, sk)
 note right: 回傳測驗結果
 AWS --> Client: Exam
+
+@enduml
+```
+
+## 文章口語練習 API 流程圖
+
+```
+@startuml
+
+title 分級測驗考試流程
+
+participant "冠富" as Client
+participant "API" as API
+participant "S3" as S3
+participant "OpenAI" as OpenAI
+
+note over Client: 1. 開始一個新的口語練習
+Client -> API: startExam(article, examType: ARTICLE_SPEECH_PRACTICE)
+note right: 創建一個口語練習
+API --> Client: accountId, sk
+
+note over Client: 2. 取得signedUrl
+Client -> API: getUploadVoiceSignedURL(args...)
+API -> S3: args...
+note right: S3生成臨時的signedUrl
+note left: API傳args給S3
+S3 --> API: signedUrl
+note right: S3回傳signedUrl給API
+API --> Client: signedUrl
+
+note over Client: 3. 上傳音檔
+Client -> S3: 直接上傳mp3檔案到S3的signedUrl
+S3 --> Client: success
+
+S3 -[#blue]-> OpenAI : mp3
+note right: OpenAI轉成文字檔
+note left: 觸發S3 streaming
+OpenAI -[#blue]-> API: 口說文字檔
+note left: 儲存口說文字檔
+API -[#blue]-> OpenAI: 口說文字檔
+note right: 分析口說文字檔
+OpenAI -[#blue]-> API: 分析結果
+note left: 儲存分析結果
+
+note over Client: 重複第2,3步，完成所有練習
+
+note over Client: 4. 回顧測驗結果，或是測驗歷史紀錄
+Client -> API: exams(accountId, sk)
+note right: 回傳測驗結果
+API --> Client: Exam
 
 @enduml
 ```
