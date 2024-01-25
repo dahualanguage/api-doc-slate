@@ -176,8 +176,8 @@ note over Client: 重複第2,3步，完成所有練習
 
 note over Client: 4. 回顧測驗結果，或是測驗歷史紀錄
 Client -> API: exams(accountId, sk)
-note right: 回傳測驗結果
 API --> Client: Exam
+note left: 回傳測驗結果
 
 @enduml
 ```
