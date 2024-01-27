@@ -702,6 +702,7 @@ async function uploadFile(file, signedUrl) {
       // Signed URL 中已包含所有必要的認證頭信息，所以這裡不需要設置 `Authorization` 頭
       headers: {
         "Content-Type": "audio/mpeg",
+        "Content-Length": file.size
       },
       body: file, // 將Mp3檔作為請求體
     });
