@@ -1388,6 +1388,7 @@ API KEY 每一年需要更新一次 (找 Wilson 拿 API KEY.)
       <span class="c1">// Signed URL 中已包含所有必要的認證頭信息，所以這裡不需要設置 `Authorization` 頭</span>
       <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
         <span class="dl">"</span><span class="s2">Content-Type</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">audio/mpeg</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">Content-Length</span><span class="dl">"</span><span class="p">:</span> <span class="nx">file</span><span class="p">.</span><span class="nx">size</span>
       <span class="p">},</span>
       <span class="na">body</span><span class="p">:</span> <span class="nx">file</span><span class="p">,</span> <span class="c1">// 將Mp3檔作為請求體</span>
     <span class="p">});</span>
