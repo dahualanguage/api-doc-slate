@@ -321,12 +321,6 @@
                   <li>
                     <a href="#prod-endpoint" class="toc-h2 toc-link" data-title="正式機(prod) endpoint:">正式機(prod) endpoint:</a>
                   </li>
-                  <li>
-                    <a href="#api" class="toc-h2 toc-link" data-title="分級測驗 API">分級測驗 API</a>
-                  </li>
-                  <li>
-                    <a href="#api-2" class="toc-h2 toc-link" data-title="文章口語練習 API">文章口語練習 API</a>
-                  </li>
               </ul>
           </li>
           <li>
@@ -336,10 +330,13 @@
             <a href="#time" class="toc-h1 toc-link" data-title="Time">Time</a>
           </li>
           <li>
+            <a href="#level" class="toc-h1 toc-link" data-title="難度分級 Level">難度分級 Level</a>
+          </li>
+          <li>
             <a href="#debugging" class="toc-h1 toc-link" data-title="Debugging">Debugging</a>
           </li>
           <li>
-            <a href="#exam" class="toc-h1 toc-link" data-title="Exam">Exam</a>
+            <a href="#api" class="toc-h1 toc-link" data-title="分級測驗 API">分級測驗 API</a>
               <ul class="toc-list-h2">
                   <li>
                     <a href="#start-exam-mutation" class="toc-h2 toc-link" data-title="Start Exam - Mutation">Start Exam - Mutation</a>
@@ -355,6 +352,20 @@
                   </li>
                   <li>
                     <a href="#edit-exam-mutation" class="toc-h2 toc-link" data-title="Edit Exam - Mutation">Edit Exam - Mutation</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#api-2" class="toc-h1 toc-link" data-title="文章口語練習 API">文章口語練習 API</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#start-exam-mutation-2" class="toc-h2 toc-link" data-title="Start Exam - Mutation">Start Exam - Mutation</a>
+                  </li>
+                  <li>
+                    <a href="#upload-voice-query" class="toc-h2 toc-link" data-title="Upload Voice - Query">Upload Voice - Query</a>
+                  </li>
+                  <li>
+                    <a href="#exams-query-2" class="toc-h2 toc-link" data-title="Exams - Query">Exams - Query</a>
                   </li>
               </ul>
           </li>
@@ -379,21 +390,13 @@
 目前有兩種 APIs：</p>
 
 <ol>
-<li>分級測驗的考試 API</li>
+<li>分級測驗 API</li>
 <li>文章口語練習 API</li>
 </ol>
 <h2 id='dev-endpoint'>測試機(dev) endpoint:</h2>
 <p><code>https://bmxybfldb5bjdickj2z5gtm2ui.appsync-api.ap-southeast-1.amazonaws.com/graphql</code></p>
 <h2 id='prod-endpoint'>正式機(prod) endpoint:</h2>
 <p><code>還沒架，預計明年初開始架</code> 😆</p>
-<h2 id='api'>分級測驗 API</h2>
-<p>以下是 &quot;分級測驗 API&quot; 的流程圖。</p>
-
-<p><img src="images/exam-0bb2414a.svg" alt="分級測驗 API" /></p>
-<h2 id='api-2'>文章口語練習 API</h2>
-<p>以下是 &quot;文章口語練習 API&quot; 的流程圖，藍色虛線代表異步(async)的在後端執行，冠富只有第三步需要直接上傳 mp3 檔到 AWS S3，其他步驟都只要跟 API 串接即可。</p>
-
-<p><img src="images/speechPractice-65c67f77.svg" alt="分級測驗 API" /></p>
 <h1 id='authentication'>Authentication</h1>
 <blockquote>
 <p>請把以下這個放到 GraphQL Query/Mutation 的 Headers 裡面</p>
@@ -411,6 +414,44 @@ API KEY 每一年需要更新一次 (找 Wilson 拿 API KEY.)
 </aside>
 <h1 id='time'>Time</h1>
 <p>因為用戶可能來自世界各地，所以在這個系統中的所有 <code>startTime</code> 都是 <a href="https://www.epochconverter.com/">epoch timestamp</a> 的形式 (例如 <code>1698117168</code>)，Client 端要再根據用戶的時區轉換時間。</p>
+<h1 id='level'>難度分級 Level</h1>
+<p>大話的難度分級總共有七級，以下是 Level ID 對照表。</p>
+
+<table><thead>
+<tr>
+<th>LevelId</th>
+<th>Level</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>TOCFL1:HSK2</code></td>
+<td>Novice</td>
+</tr>
+<tr>
+<td><code>TOCFL2:HSK3</code></td>
+<td>Beginner</td>
+</tr>
+<tr>
+<td><code>TOCFL3:HSK4</code></td>
+<td>Elementary</td>
+</tr>
+<tr>
+<td><code>TOCFL4:HSK5</code></td>
+<td>Intermediate</td>
+</tr>
+<tr>
+<td><code>TOCFL5:HSK6</code></td>
+<td>Upper-intermediate</td>
+</tr>
+<tr>
+<td><code>TOCFL6:HSK7-9</code></td>
+<td>Advanced</td>
+</tr>
+<tr>
+<td><code>TOCFL7:HSK7-9</code></td>
+<td>Challenge</td>
+</tr>
+</tbody></table>
 <h1 id='debugging'>Debugging</h1>
 <p>所有的 APIs 都會回傳 <code>requestId</code>，如果開發過程遇到問題，可以提供 <code>requestId</code> 給大話，大話的工程師會根據 <code>requestId</code> 去檢查 logs。</p>
 <div class="highlight"><pre class="highlight graphql tab-graphql"><code><span class="k">query</span><span class="w"> </span><span class="n">exams</span><span class="w"> </span><span class="p">{</span><span class="w">
@@ -449,7 +490,11 @@ API KEY 每一年需要更新一次 (找 Wilson 拿 API KEY.)
     </span><span class="p">}</span><span class="w">
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre></div><h1 id='exam'>Exam</h1><h2 id='start-exam-mutation'>Start Exam - Mutation</h2><div class="highlight"><pre class="highlight graphql tab-graphql"><code><span class="k">mutation</span><span class="w"> </span><span class="n">startExam</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></code></pre></div><h1 id='api'>分級測驗 API</h1>
+<p>以下是 &quot;分級測驗 API&quot; 的流程圖。</p>
+
+<p><img src="images/exam-0bb2414a.svg" alt="分級測驗 API" /></p>
+<h2 id='start-exam-mutation'>Start Exam - Mutation</h2><div class="highlight"><pre class="highlight graphql tab-graphql"><code><span class="k">mutation</span><span class="w"> </span><span class="n">startExam</span><span class="w"> </span><span class="p">{</span><span class="w">
   </span><span class="n">startExam</span><span class="p">(</span><span class="n">accountId</span><span class="p">:</span><span class="w"> </span><span class="s2">"test-accountId"</span><span class="p">,</span><span class="w"> </span><span class="n">examType</span><span class="p">:</span><span class="w"> </span><span class="n">DETERMINE_LEVEL</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
     </span><span class="n">error</span><span class="w">
     </span><span class="n">message</span><span class="w">
@@ -495,11 +540,12 @@ API KEY 每一年需要更新一次 (找 Wilson 拿 API KEY.)
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 <p>startExam mutation 會開啟一個新的考試，一個學生可以有多個考試。
+<code>examType</code> 這裡預設為 <code>DETERMINE_LEVEL</code>
 開啟一個考試後，API 會回傳下一題的題目 ID(<code>nextQuestionId</code>)</p>
 
 <p>考試狀態(<code>status</code>) 有 3 種(<code>IN_PROGRESS</code>, <code>COMPLETED</code>, <code>CANCELED</code>)</p>
 
-<p>考試類型(<code>type</code>) 有 2 種(<code>DETERMINE_LEVEL</code>, <code>ESSAY</code>)</p>
+<p>考試類型(<code>type</code>) 有 2 種(<code>DETERMINE_LEVEL</code>, <code>ARTICLE_SPEECH_PRACTICE</code>)</p>
 <h3 id='mutation-input-parameters'>Mutation Input Parameters</h3>
 <table><thead>
 <tr>
@@ -516,7 +562,7 @@ API KEY 每一年需要更新一次 (找 Wilson 拿 API KEY.)
 <tr>
 <td>examType (required)</td>
 <td>enum</td>
-<td>考試種類(目前只有<code>DETERMINE_LEVEL</code>跟<code>ESSAY</code>)</td>
+<td>考試種類(目前只有<code>DETERMINE_LEVEL</code>跟<code>ARTICLE_SPEECH_PRACTICE</code>)</td>
 </tr>
 </tbody></table>
 
@@ -564,7 +610,7 @@ API KEY 每一年需要更新一次 (找 Wilson 拿 API KEY.)
 <tr>
 <td>type</td>
 <td>enum</td>
-<td>考試種類(目前只有<code>DETERMINE_LEVEL</code>, <code>ESSAY</code>)</td>
+<td>考試種類(目前只有<code>DETERMINE_LEVEL</code>, <code>ARTICLE_SPEECH_PRACTICE</code>)</td>
 </tr>
 <tr>
 <td>remainingNumOfQuestion</td>
@@ -985,7 +1031,7 @@ API KEY 每一年需要更新一次 (找 Wilson 拿 API KEY.)
 <tr>
 <td>examType (optional)</td>
 <td>enum</td>
-<td>考試種類(目前只有<code>DETERMINE_LEVEL</code>跟<code>ESSAY</code>)</td>
+<td>考試種類(目前只有<code>DETERMINE_LEVEL</code>跟<code>ARTICLE_SPEECH_PRACTICE</code>)</td>
 </tr>
 <tr>
 <td>withDetails (預設為 false)</td>
@@ -1130,6 +1176,477 @@ API KEY 每一年需要更新一次 (找 Wilson 拿 API KEY.)
 <td>message</td>
 <td>string</td>
 <td>Error 訊息</td>
+</tr>
+</tbody></table>
+<h1 id='api-2'>文章口語練習 API</h1>
+<p>以下是 &quot;文章口語練習 API&quot; 的流程圖，藍色虛線代表異步(async)的在後端執行，冠富只有第三步需要直接上傳 mp3 檔到 AWS S3，其他步驟都只要跟 API 串接即可。</p>
+
+<p><img src="images/speechPractice-65c67f77.svg" alt="分級測驗 API" /></p>
+<h2 id='start-exam-mutation-2'>Start Exam - Mutation</h2><div class="highlight"><pre class="highlight graphql tab-graphql"><code><span class="k">mutation</span><span class="w"> </span><span class="n">startExam</span><span class="w"> </span><span class="p">{</span><span class="w">
+  </span><span class="n">startExam</span><span class="p">(</span><span class="w">
+    </span><span class="n">accountId</span><span class="p">:</span><span class="w"> </span><span class="s2">"test-accountId"</span><span class="w">
+    </span><span class="n">examType</span><span class="p">:</span><span class="w"> </span><span class="n">ARTICLE_SPEECH_PRACTICE</span><span class="w">
+    </span><span class="n">article</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="n">articleId</span><span class="p">:</span><span class="w"> </span><span class="s2">"69"</span><span class="w">
+      </span><span class="n">levelId</span><span class="p">:</span><span class="w"> </span><span class="s2">"TOCFL7:HSK7-9"</span><span class="w">
+      </span><span class="n">articleContent</span><span class="p">:</span><span class="w"> </span><span class="s2">"在好萊塢(Hollywood)電影裡的東方角色，總是給人一種神秘的感覺--不是狡猾又危險，就是深藏不露的厲害角色...."</span><span class="w">
+      </span><span class="n">questions</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+          </span><span class="n">questionId</span><span class="p">:</span><span class="w"> </span><span class="s2">"1"</span><span class="w">
+          </span><span class="n">questionContent</span><span class="p">:</span><span class="w"> </span><span class="s2">"請問你有沒有自己學習古代哲學的經驗？請說說看。"</span><span class="w">
+          </span><span class="n">description</span><span class="p">:</span><span class="w"> </span><span class="s2">"1. 你在什麼情況下知道的？2. 在知道之後，你做了什麼樣的學習？"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">]</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="n">error</span><span class="w">
+    </span><span class="n">message</span><span class="w">
+    </span><span class="n">exam</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="n">accountId</span><span class="w">
+      </span><span class="n">sk</span><span class="w">
+      </span><span class="n">startTime</span><span class="w">
+      </span><span class="n">status</span><span class="w">
+      </span><span class="n">type</span><span class="w">
+      </span><span class="n">remainingNumOfQuestion</span><span class="w">
+      </span><span class="n">totalNumOfQuestion</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+<p>以上的 startExam mutation 會回傳以下 JSON:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"startExam"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"error"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"e17d09f9-12e6-4370-a431-d3523d9c6449"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"exam"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"accountId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"test-accountId"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"sk"</span><span class="p">:</span><span class="w"> </span><span class="s2">"main:ARTICLE_SPEECH_PRACTICE:ts:1706318115"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"startTime"</span><span class="p">:</span><span class="w"> </span><span class="mi">1706318115</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"IN_PROGRESS"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ARTICLE_SPEECH_PRACTICE"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"remainingNumOfQuestion"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"totalNumOfQuestion"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>startExam mutation 會開啟一個文章口語練習，一個學生可以有多個練習，在這裡 <code>examType</code> 必須為 <code>ARTICLE_SPEECH_PRACTICE</code>，每次開啟文章口語練習都要傳<code>article</code>給 API，返回的口語練習狀態(<code>status</code>) 有 3 種(<code>IN_PROGRESS</code>, <code>COMPLETED</code>, <code>CANCELED</code>)</p>
+<h3 id='mutation-input-parameters-5'>Mutation Input Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>accountId (required)</td>
+<td>string</td>
+<td>登入帳號 ID</td>
+</tr>
+<tr>
+<td>examType (required)</td>
+<td>enum</td>
+<td>考試種類(目前只有<code>DETERMINE_LEVEL</code>跟<code>ARTICLE_SPEECH_PRACTICE</code>)</td>
+</tr>
+<tr>
+<td>article (required)</td>
+<td>object</td>
+<td>文章內容(包含題目)</td>
+</tr>
+<tr>
+<td>article.articleId (required)</td>
+<td>string</td>
+<td>文章的 ID</td>
+</tr>
+<tr>
+<td>article.levelId (required)</td>
+<td>string</td>
+<td>文章的分級</td>
+</tr>
+<tr>
+<td>article.articleContent (required)</td>
+<td>string</td>
+<td>文章內容</td>
+</tr>
+<tr>
+<td>article.questions (required)</td>
+<td>array</td>
+<td>考題(question) Array</td>
+</tr>
+<tr>
+<td>question (required)</td>
+<td>object</td>
+<td>考題(question)</td>
+</tr>
+<tr>
+<td>question.questionId (required)</td>
+<td>string</td>
+<td>考題的 ID</td>
+</tr>
+<tr>
+<td>question.questionContent (required)</td>
+<td>string</td>
+<td>題目內容</td>
+</tr>
+<tr>
+<td>question.description (optional)</td>
+<td>string</td>
+<td>考題的解釋</td>
+</tr>
+</tbody></table>
+
+<aside class="success">
+注意 — examType 是 GraphQL enum type
+</aside>
+<h3 id='response-6'>Response</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>accountId</td>
+<td>string</td>
+<td>登入帳號 ID</td>
+</tr>
+<tr>
+<td>sk</td>
+<td>string</td>
+<td>當前練習的 sort key</td>
+</tr>
+<tr>
+<td>startTime</td>
+<td>string</td>
+<td>當前練習的開始時間</td>
+</tr>
+<tr>
+<td>status</td>
+<td>enum</td>
+<td>練習狀態(目前只有<code>IN_PROGRESS</code>, <code>COMPLETED</code>, <code>CANCELED</code>)</td>
+</tr>
+<tr>
+<td>type</td>
+<td>enum</td>
+<td>練習種類(<code>ARTICLE_SPEECH_PRACTICE</code>)</td>
+</tr>
+<tr>
+<td>remainingNumOfQuestion</td>
+<td>Int</td>
+<td>當前文章練習題的剩下題數</td>
+</tr>
+<tr>
+<td>totalNumOfQuestion</td>
+<td>Int</td>
+<td>當前文章口語練習總共的題數</td>
+</tr>
+</tbody></table>
+<h2 id='upload-voice-query'>Upload Voice - Query</h2><div class="highlight"><pre class="highlight graphql tab-graphql"><code><span class="k">query</span><span class="w"> </span><span class="n">getUploadVoiceSignedURL</span><span class="w"> </span><span class="p">{</span><span class="w">
+  </span><span class="n">getUploadVoiceSignedURL</span><span class="p">(</span><span class="w">
+    </span><span class="n">accountId</span><span class="p">:</span><span class="w"> </span><span class="s2">"test-accountId"</span><span class="w">
+    </span><span class="n">sk</span><span class="p">:</span><span class="w"> </span><span class="s2">"main:ARTICLE_SPEECH_PRACTICE:ts:1706318115"</span><span class="w">
+    </span><span class="n">articleId</span><span class="p">:</span><span class="w"> </span><span class="s2">"69"</span><span class="w">
+    </span><span class="n">articleIdQuestionId</span><span class="p">:</span><span class="w"> </span><span class="s2">"1"</span><span class="w">
+  </span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="n">error</span><span class="w">
+    </span><span class="n">message</span><span class="w">
+    </span><span class="n">signedUrl</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+<p>以上的 getUploadVoiceSignedURL query 會回傳以下 JSON:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"getUploadVoiceSignedURL"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"error"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"signedUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://dev-commerce-speech.s3.ap-southeast-1.amazonaws.com/ARTICLE_SPEECH_PRACTICE/test-accountId/1706318115/69/1.mp3?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=ASIAYQHUHCC46NUU75GE%2F20240127%2Fap-southeast-1%2Fs3%2Faws4_request&amp;X-Amz-Date=20240127T042342Z&amp;X-Amz-Expires=60&amp;X-Amz-Security-Token=IQoJb3JpZ2luX2VjEP3%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaDmFwLXNvdXRoZWFzdC0xIkcwRQIgVm1ZZUsR1%2BbSruaTat6iIRN5zNdJdQsZzjksGhegUgACIQC%2FbiRzjOjR1%2F193ltTR%2FmwoxaOPoZuiAyCO7BvoMVKYyqTAwi2%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F8BEAAaDDU4NDYyNzcyMDM3NyIMroF40FQt%2BlZkIV6bKucCZRPmd%2Fxzfu3adiPusT4UaTvFcWvvfzk6gSVieRzlF9aDWK1vwH%2FVHNV6bECdZ3aoa1JjRY8OEdh10GQeJxtX951V06HoDUPJMuWFvrQST6cIMwVAyk18ztzn%2BIoCrVZdg6y0MX24eKVq1cGn8HKVHQUM5aVIOHiBMlrZ4AHL9gDYJQc9sgEqnv2jI%2F7NfnsN%2BHHU1HwXVGPDIywOgDHKucz4c%2BshPUnufkN6zLE2R6FooJ1R7xbjV4mjdhRd25ypMDiKp9tnDRtCPrkMR%2FN1zuSrXtRktark3%2B3NFHX9Vsmlqg440JcpoR4Z8ZU%2B%2BwEJnXzON1dKaVfN22BED6v9baHQFGM3TJgnCQO%2FVfqUsFq%2BZ0EhcQ%2FmmqRyoR6vllviCpGZLswTunocAGEYO5zRJn2ejQsgIk9DMeUikAMOuMz6lPeDNCxooRox9ELHv4c4d5GZzjffEvzF39WU3DaEpXUTGlJl%2BSYwoYrSrQY6nQFcUXN3liJjWZvIW1D09ZTQX89DWLeGfuYJJ%2BY0rJ2afR7KYNIWWqX2vqHsUtTwB2918Gn5ZamwWRkkK3ufMiDpIp7ob%2BN3Mb99CEYY63y1ujF%2BTn02lZmMh%2Fr5qZpaPRXGYZmoRGQaJtwMUU9rauQP%2BDXjyUJUZUHq15hr1Czrq0Psv%2F%2B1sYS0Wun6aZgahjRiQ%2FJ2hNSCi1nOjV4P&amp;X-Amz-Signature=e853aaa06de219a7ee491cbd74deda69317507f6bc3276bcccb09dac7dc5f996&amp;X-Amz-SignedHeaders=content-encoding%3Bhost&amp;x-id=PutObject"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+<p>以下是 ChatGPT 給的簡單的 Pseudo code，可以上傳 mp3 檔到 Signed URL</p>
+</blockquote>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="c1">// 假設 `signedUrl` 是從後端獲得的 Signed URL</span>
+<span class="kd">const</span> <span class="nx">signedUrl</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">YOUR_PRE_SIGNED_URL_HERE</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="c1">// `file` 是一個指向你要上傳的 MP3 檔案的參考，可以通過 &lt;input type="file"&gt; 獲得</span>
+<span class="k">async</span> <span class="kd">function</span> <span class="nx">uploadFile</span><span class="p">(</span><span class="nx">file</span><span class="p">,</span> <span class="nx">signedUrl</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">try</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">response</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">fetch</span><span class="p">(</span><span class="nx">signedUrl</span><span class="p">,</span> <span class="p">{</span>
+      <span class="na">method</span><span class="p">:</span> <span class="dl">"</span><span class="s2">PUT</span><span class="dl">"</span><span class="p">,</span>
+      <span class="c1">// Signed URL 中已包含所有必要的認證頭信息，所以這裡不需要設置 `Authorization` 頭</span>
+      <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
+        <span class="dl">"</span><span class="s2">Content-Type</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">audio/mpeg</span><span class="dl">"</span><span class="p">,</span>
+      <span class="p">},</span>
+      <span class="na">body</span><span class="p">:</span> <span class="nx">file</span><span class="p">,</span> <span class="c1">// 將Mp3檔作為請求體</span>
+    <span class="p">});</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">ok</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">檔案上傳成功</span><span class="dl">"</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="dl">"</span><span class="s2">檔案上傳失敗</span><span class="dl">"</span><span class="p">,</span> <span class="nx">response</span><span class="p">.</span><span class="nx">statusText</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="dl">"</span><span class="s2">上傳過程中發生錯誤</span><span class="dl">"</span><span class="p">,</span> <span class="nx">error</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// 假設這是一個簡單的觸發上傳的按鈕事件</span>
+<span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="dl">"</span><span class="s2">uploadButton</span><span class="dl">"</span><span class="p">).</span><span class="nx">addEventListener</span><span class="p">(</span><span class="dl">"</span><span class="s2">click</span><span class="dl">"</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">fileInput</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="dl">"</span><span class="s2">fileInput</span><span class="dl">"</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">fileInput</span><span class="p">.</span><span class="nx">files</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">file</span> <span class="o">=</span> <span class="nx">fileInput</span><span class="p">.</span><span class="nx">files</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span> <span class="c1">// 獲取用戶選擇的第一個檔案，即 MP3 檔案</span>
+    <span class="nx">uploadFile</span><span class="p">(</span><span class="nx">file</span><span class="p">,</span> <span class="nx">signedUrl</span><span class="p">);</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">請選擇一個檔案</span><span class="dl">"</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+
+<span class="c1">// HTML</span>
+<span class="o">&lt;</span><span class="nx">input</span> <span class="nx">type</span><span class="o">=</span><span class="dl">"</span><span class="s2">file</span><span class="dl">"</span> <span class="nx">id</span><span class="o">=</span><span class="dl">"</span><span class="s2">fileInput</span><span class="dl">"</span> <span class="nx">accept</span><span class="o">=</span><span class="dl">"</span><span class="s2">.mp3</span><span class="dl">"</span> <span class="o">/&gt;</span>
+<span class="o">&lt;</span><span class="nx">button</span> <span class="nx">id</span><span class="o">=</span><span class="dl">"</span><span class="s2">uploadButton</span><span class="dl">"</span><span class="o">&gt;</span><span class="nx">Upload</span> <span class="nx">MP3</span><span class="o">&lt;</span><span class="sr">/button</span><span class="err">&gt;
+</span></code></pre></div>
+<p>上傳音檔有兩個步驟：</p>
+
+<ol>
+<li>呼叫 <code>getUploadVoiceSignedURL</code> API 取得一次性的 Signed URL</li>
+<li>透過 Signed URL 直接把音檔上傳到 S3 (不會透過大話 API)</li>
+</ol>
+
+<aside style="background-color: #f9f9f9; border-left: 6px solid #28a745; margin: 20px 0; padding: 15px; box-shadow: 0 2px 4px rgba(0,0,0,.1);">
+    <strong>注意：</strong>
+    <br>
+    <ol>
+        <li>音檔的檔名必須是 <code>articleIdQuestionId.mp3</code>（例如：articleIdQuestionId: <code>1</code>, 音檔名必須是 <code>1.mp3</code>）</li>
+        <li>Signed URL 會在 60 秒內過期，所以建議學生錄完音，準備上傳的時候再去呼叫 <code>getUploadVoiceSignedURL</code> API</li>
+    </ol>
+</aside>
+<h3 id='s3-signed-url'>S3 Signed URL 參考資料 (有興趣再讀)</h3>
+<ol>
+<li><a href="https://docs.aws.amazon.com/zh_tw/AmazonS3/latest/userguide/PresignedUrlUploadObject.html">AWS Signed URL 文檔</a></li>
+<li><a href="https://medium.com/weekly-webtips/upload-files-directly-to-s3-with-pre-signed-url-31beff41157e">類似的範例</a></li>
+</ol>
+<h3 id='query-input-parameters-2'>Query Input Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>accountId (required)</td>
+<td>string</td>
+<td>登入帳號 ID</td>
+</tr>
+<tr>
+<td>sk (required)</td>
+<td>string</td>
+<td>當前練習的 sort key</td>
+</tr>
+<tr>
+<td>articleId (required)</td>
+<td>string</td>
+<td>當前文章 ID</td>
+</tr>
+<tr>
+<td>articleIdQuestionId (required)</td>
+<td>string</td>
+<td>當前文章考題 ID</td>
+</tr>
+</tbody></table>
+<h3 id='response-7'>Response</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>signedUrl</td>
+<td>string</td>
+<td>上傳音檔用的 Pre-Signed URL</td>
+</tr>
+<tr>
+<td>error</td>
+<td>boolean</td>
+<td>是否有 Error</td>
+</tr>
+<tr>
+<td>message</td>
+<td>string</td>
+<td>Error 訊息</td>
+</tr>
+</tbody></table>
+<h2 id='exams-query-2'>Exams - Query</h2><div class="highlight"><pre class="highlight graphql tab-graphql"><code><span class="k">query</span><span class="w"> </span><span class="n">exams</span><span class="w"> </span><span class="p">{</span><span class="w">
+  </span><span class="n">exams</span><span class="p">(</span><span class="w">
+    </span><span class="n">accountId</span><span class="p">:</span><span class="w"> </span><span class="s2">"test-accountId"</span><span class="w">
+    </span><span class="n">sk</span><span class="p">:</span><span class="w"> </span><span class="s2">"main:ARTICLE_SPEECH_PRACTICE:ts:1706243619"</span><span class="w">
+  </span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="n">error</span><span class="w">
+    </span><span class="n">message</span><span class="w">
+    </span><span class="n">requestId</span><span class="w">
+    </span><span class="n">exams</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="n">questionDetails</span><span class="w">
+      </span><span class="n">startTime</span><span class="w">
+      </span><span class="n">status</span><span class="w">
+      </span><span class="n">completedTime</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+<p>以上的 exams query 會回傳以下 JSON:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"exams"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"error"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3101f714-e59c-4ca4-8d3b-85b126b72f0a"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"exams"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"questionDetails"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{</span><span class="se">\"</span><span class="s2">1</span><span class="se">\"</span><span class="s2">:{</span><span class="se">\"</span><span class="s2">questionId</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">1</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">articleId</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">69</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">voiceText</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">我看 Minecraft 的视频的时候,才听说孙子的哲学。 一个玩游戏的人用了孙子的哲学赢一场农场土豆比赛。 我觉得在现代的电脑游戏上用古老的兵法太有趣了。 所以我马上买了一本《孙子兵法》,一天就看完了。 我的叔叔是军事武器的企业家,他给了我《孙子兵法》这本书并强调哲学战略,不但实用于军事的业用在日常生活。</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">questionContent</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">請問你有沒有自己學習古代哲學的經驗？請說說看。</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">sk</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">q:ARTICLE_SPEECH_PRACTICE:ts:1706243619:69:1</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">memo</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">analyzedResult</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">這個是AI的口語分析結果.....</span><span class="se">\"</span><span class="s2">}}"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"startTime"</span><span class="p">:</span><span class="w"> </span><span class="mi">1706243619</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"COMPLETED"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"completedTime"</span><span class="p">:</span><span class="w"> </span><span class="mi">1706244545</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">]</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>Exam query 可以根據 input parameters 回傳學生的 &quot;一個&quot; 或 &quot;多個&quot; 考試/練習 歷史紀錄。</p>
+
+<ol>
+<li> 當你只提供 <code>accountId</code> 的情況下，Exam API 會回傳這個登錄帳號下 &quot;所有&quot; 的考試/練習歷史紀錄。</li>
+<li> 當你提通 <code>accountId</code> + <code>sk</code> 的情況下，Exam API 會回傳這個登錄帳號下 &quot;一個&quot; 考試/練習記錄。</li>
+</ol>
+
+<p>比較推薦的做法是，可以先不傳 withDetails(預設為 false)，並且拿到學生的多個測驗歷史後，在讓學生點選某一個測驗，這時候在把 withDetails 設定為 true 並且傳(accountId + sk(學生選中的 sk))給 Exam API，這時 Exam API 就會把所有測驗細節回傳給學生。</p>
+<h3 id='query-input-parameters-3'>Query Input Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>accountId (required)</td>
+<td>string</td>
+<td>登入帳號 ID</td>
+</tr>
+<tr>
+<td>sk (required)</td>
+<td>string</td>
+<td>當前練習的 sort key</td>
+</tr>
+<tr>
+<td>examType (optional)</td>
+<td>string</td>
+<td>考試種類</td>
+</tr>
+<tr>
+<td>withDetails(預設為 <code>false</code>)</td>
+<td>boolean</td>
+<td>是否回傳學生的答案 + AI 分析結果</td>
+</tr>
+</tbody></table>
+<h3 id='response-8'>Response</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>error</td>
+<td>boolean</td>
+<td>是否有 Error</td>
+</tr>
+<tr>
+<td>message</td>
+<td>string</td>
+<td>Error 訊息</td>
+</tr>
+<tr>
+<td>exams</td>
+<td>array</td>
+<td>exam(考試/練習) array</td>
+</tr>
+<tr>
+<td>exam</td>
+<td>object</td>
+<td>exam(考試/練習)</td>
+</tr>
+<tr>
+<td>exam.startTime</td>
+<td>Int</td>
+<td>當前練習的開始時間</td>
+</tr>
+<tr>
+<td>exam.status</td>
+<td>string</td>
+<td>考試狀態(目前只有<code>IN_PROGRESS</code>, <code>COMPLETED</code>, <code>CANCELED</code>)</td>
+</tr>
+<tr>
+<td>exam.completedTime</td>
+<td>Int</td>
+<td>當前練習的結束時間</td>
+</tr>
+<tr>
+<td>exam.questionDetails</td>
+<td>AWSJSON</td>
+<td>包含 語音轉文字內容 + AI 分析的結果</td>
+</tr>
+<tr>
+<td>questionDetails[questionId].questionId</td>
+<td>string</td>
+<td>練習題目的 ID</td>
+</tr>
+<tr>
+<td>questionDetails[questionId].articleId</td>
+<td>string</td>
+<td>練習文章的 ID</td>
+</tr>
+<tr>
+<td>questionDetails[questionId].voiceText</td>
+<td>string</td>
+<td>語音轉文字內容</td>
+</tr>
+<tr>
+<td>questionDetails[questionId].questionContent</td>
+<td>string</td>
+<td>練習題題目</td>
+</tr>
+<tr>
+<td>questionDetails[questionId].sk</td>
+<td>string</td>
+<td>練習題題目 sort key</td>
+</tr>
+<tr>
+<td>questionDetails[questionId].memo</td>
+<td>string</td>
+<td>練習題題目備註</td>
+</tr>
+<tr>
+<td>questionDetails[questionId].analyzedResult</td>
+<td>string</td>
+<td>AI 分析的結果</td>
 </tr>
 </tbody></table>
 <h1 id='errors'>Errors</h1>
