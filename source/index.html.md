@@ -733,7 +733,7 @@ document.getElementById("uploadButton").addEventListener("click", function () {
 <button id="uploadButton">Upload MP3</button>
 ```
 
-上傳音檔有兩個步驟：
+上傳 mp3 音檔有兩個步驟：
 
 1. 呼叫 `getUploadVoiceSignedURL` API 取得一次性的 Signed URL
 2. 透過 Signed URL 直接把音檔上傳到 S3 (不會透過大話 API)
@@ -830,20 +830,102 @@ Exam query 可以根據 input parameters 回傳學生的 "一個" 或 "多個" �
 
 ### Response
 
-| Parameter                                   | type    | Description                                              |
-| ------------------------------------------- | ------- | -------------------------------------------------------- |
-| error                                       | boolean | 是否有 Error                                             |
-| message                                     | string  | Error 訊息                                               |
-| exams                                       | array   | exam(考試/練習) array                                    |
-| exam                                        | object  | exam(考試/練習)                                          |
-| exam.startTime                              | Int     | 當前練習的開始時間                                       |
-| exam.status                                 | string  | 考試狀態(目前只有`IN_PROGRESS`, `COMPLETED`, `CANCELED`) |
-| exam.completedTime                          | Int     | 當前練習的結束時間                                       |
-| exam.questionDetails                        | AWSJSON | 包含 語音轉文字內容 + AI 分析的結果                      |
-| questionDetails[questionId].questionId      | string  | 練習題目的 ID                                            |
-| questionDetails[questionId].articleId       | string  | 練習文章的 ID                                            |
-| questionDetails[questionId].voiceText       | string  | 語音轉文字內容                                           |
-| questionDetails[questionId].questionContent | string  | 練習題題目                                               |
-| questionDetails[questionId].sk              | string  | 練習題題目 sort key                                      |
-| questionDetails[questionId].memo            | string  | 練習題題目備註                                           |
-| questionDetails[questionId].analyzedResult  | string  | AI 分析的結果                                            |
+| Parameter                   | type    | Description                                              |
+| --------------------------- | ------- | -------------------------------------------------------- |
+| error                       | boolean | 是否有 Error                                             |
+| message                     | string  | Error 訊息                                               |
+| exams                       | array   | exam(考試/練習) array                                    |
+| exam                        | object  | exam(考試/練習)                                          |
+| exam.startTime              | Int     | 當前練習的開始時間                                       |
+| exam.status                 | string  | 考試狀態(目前只有`IN_PROGRESS`, `COMPLETED`, `CANCELED`) |
+| exam.completedTime          | Int     | 當前練習的結束時間                                       |
+| exam.questionDetails        | AWSJSON | 包含"所有"題目的(語音轉文字內容+AI 分析的結果)           |
+| questionDetails[questionId] | obj     | question 包含"單一"題目的(語音轉文字內容+AI 分析的結果)  |
+| question.questionId         | string  | 練習題目的 ID                                            |
+| question.articleId          | string  | 練習文章的 ID                                            |
+| question.voiceText          | string  | 語音轉文字內容                                           |
+| question.questionContent    | string  | 練習題題目                                               |
+| question.sk                 | string  | 練習題題目 sort key                                      |
+| question.memo               | string  | 練習題題目備註                                           |
+| question.analyzedResult     | string  | AI 分析的結果                                            |
+
+## Download Voice - Query
+
+```graphql
+query getDownloadVoiceSignedURL {
+  getUploadVoiceSignedURL(
+    accountId: "test-accountId"
+    sk: "main:ARTICLE_SPEECH_PRACTICE:ts:1706243619"
+    articleId: "69"
+    articleIdQuestionId: "1"
+  ) {
+    error
+    message
+    signedUrl
+  }
+}
+```
+
+> 以上的 getUploadVoiceSignedURL query 會回傳以下 JSON:
+
+```json
+{
+  "data": {
+    "getUploadVoiceSignedURL": {
+      "error": false,
+      "message": "",
+      "signedUrl": "https://dev-commerce-speech.s3.ap-southeast-1.amazonaws.com/ARTICLE_SPEECH_PRACTICE/test-accountId/1706243619/69/1.mp3?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIAYQHUHCC4ZXLIT3FD%2F20240128%2Fap-southeast-1%2Fs3%2Faws4_request&X-Amz-Date=20240128T060141Z&X-Amz-Expires=60&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEBYaDmFwLXNvdXRoZWFzdC0xIkcwRQIgTPC59NGDjRZhbZ82TyoS30QoF0t4KIRvfkD5gmQlnJ8CIQDhfAgF6gywaEGYGtYnwXOCz39%2Bsj20Tp05zCx8rcRqyiqTAwjP%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F8BEAAaDDU4NDYyNzcyMDM3NyIMGnm34NCSgUUOwy3xKucCsF6Oo1HlYijF0PKRWyYS7xZtceRLp0dcfdnjv0g%2Fy8v9Y8M9XXLfCPqEncXiM8pB6za9ANhN55Srx6hSvonsME3ZKnR0UZauPoo4bw8UJIqhediLtH%2F98RWiCRWN7ljf727doxPuFAWddPE6BK7wKs8EKC5xDqH1JXN8%2BNlMueJOmFTjyhCnlaK%2FQZlhWQ5O8dIaWRB7u1o2LQzfJg4kA1JQJk3oGVvsXGixdbBUMoiOrAEdtK0laqfuGVYnlAlDY1j4Tbsml9gOLoKC5CtAqTsPWAP7P0Mv4WbuEmJfXrx40OCsAkPUZubk3urGp5z1lb%2Bc%2BGnpJBdcxjLPID6pri6zfn1%2BMqOOnSXq9i965fu3vrzAjIDVBh7kElNtL1fv9Xpfqld9ULZh6egzlP%2FJSOvM9vfsO5ismTGHqrvAATG3sBfYaJJ63Z6hMAnTW9uiy0kL60Jokn7ASVg4r202QUqi7hcOnuAwxNvXrQY6nQG3KE18vQX9I7Oj0kYoqwY9MGEnhejz5M%2FOVMxS9kD6alOfGHmsE8sFy%2FjmNIc4uIDXfx6GV00ziFsoHxEifzBkOsuyiFWoOf8AF2W6hx7R9S8hSrNBhDVkPkQjg3QIOr9IGxR9gv75dfgVH9GG5EH%2FZ2EszXa9RTeXPZOHrcYr3EghW6EljZT0DhbuoeFrPVwlV15Jd7NC%2FYalq2ff&X-Amz-Signature=e421b7c7ce2829dc83254ead59d95cd8fb364338da30e1dc4a273b349c9dc9ce&X-Amz-SignedHeaders=content-encoding%3Bhost&x-id=PutObject"
+    }
+  }
+}
+```
+
+> 以下是 ChatGPT 給的簡單的 Pseudo code，可以從 S3 下載 mp3 檔的 Signed URL
+
+```javascript
+// singedUrl from getDownloadVoiceSignedURL
+const signedUrl = "SIGNED_URL";
+
+// 獲取 audio 標籤
+const audioPlayer = document.getElementById("audioPlayer");
+
+// 定義異步函數來下載並播放音頻
+async function downloadAndPlayAudio(signedUrl) {
+  try {
+    const response = await fetch(signedUrl); // 使用 fetch 下載 MP3 文件
+    const blob = await response.blob(); // 將響應轉換為 Blob
+
+    // 創建一個指向下載內容的 URL
+    const audioUrl = window.URL.createObjectURL(blob);
+    audioPlayer.src = audioUrl; // 設置音頻源
+    audioPlayer.play(); // 播放音頻
+  } catch (error) {
+    console.error("Error downloading or playing the audio:", error);
+  }
+}
+
+// 呼叫函數並傳入 Pre-Signed URL
+downloadAndPlayAudio(signedUrl);
+```
+
+下載 mp3 音檔有兩個步驟：
+
+1. 呼叫 `getDownloadVoiceSignedURL` API 取得一次性的 Signed URL
+2. 透過 Signed URL 直接從 S3 下載音檔 (不會透過大話 API)
+
+### Query Input Parameters
+
+| Parameter                      | type   | Description         |
+| ------------------------------ | ------ | ------------------- |
+| accountId (required)           | string | 登入帳號 ID         |
+| sk (required)                  | string | 當前練習的 sort key |
+| articleId (required)           | string | 當前文章 ID         |
+| articleIdQuestionId (required) | string | 當前文章考題 ID     |
+
+### Response
+
+| Parameter | type    | Description                 |
+| --------- | ------- | --------------------------- |
+| signedUrl | string  | 下載音檔用的 Pre-Signed URL |
+| error     | boolean | 是否有 Error                |
+| message   | string  | Error 訊息                  |
