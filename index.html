@@ -367,6 +367,9 @@
                   <li>
                     <a href="#exams-query-2" class="toc-h2 toc-link" data-title="Exams - Query">Exams - Query</a>
                   </li>
+                  <li>
+                    <a href="#download-voice-query" class="toc-h2 toc-link" data-title="Download Voice - Query">Download Voice - Query</a>
+                  </li>
               </ul>
           </li>
           <li>
@@ -1418,7 +1421,7 @@ API KEY 每一年需要更新一次 (找 Wilson 拿 API KEY.)
 <span class="o">&lt;</span><span class="nx">input</span> <span class="nx">type</span><span class="o">=</span><span class="dl">"</span><span class="s2">file</span><span class="dl">"</span> <span class="nx">id</span><span class="o">=</span><span class="dl">"</span><span class="s2">fileInput</span><span class="dl">"</span> <span class="nx">accept</span><span class="o">=</span><span class="dl">"</span><span class="s2">.mp3</span><span class="dl">"</span> <span class="o">/&gt;</span>
 <span class="o">&lt;</span><span class="nx">button</span> <span class="nx">id</span><span class="o">=</span><span class="dl">"</span><span class="s2">uploadButton</span><span class="dl">"</span><span class="o">&gt;</span><span class="nx">Upload</span> <span class="nx">MP3</span><span class="o">&lt;</span><span class="sr">/button</span><span class="err">&gt;
 </span></code></pre></div>
-<p>上傳音檔有兩個步驟：</p>
+<p>上傳 mp3 音檔有兩個步驟：</p>
 
 <ol>
 <li>呼叫 <code>getUploadVoiceSignedURL</code> API 取得一次性的 Signed URL</li>
@@ -1612,42 +1615,159 @@ API KEY 每一年需要更新一次 (找 Wilson 拿 API KEY.)
 <tr>
 <td>exam.questionDetails</td>
 <td>AWSJSON</td>
-<td>包含 語音轉文字內容 + AI 分析的結果</td>
+<td>包含&quot;所有&quot;題目的(語音轉文字內容+AI 分析的結果)</td>
 </tr>
 <tr>
-<td>questionDetails[questionId].questionId</td>
+<td>questionDetails[questionId]</td>
+<td>obj</td>
+<td>question 包含&quot;單一&quot;題目的(語音轉文字內容+AI 分析的結果)</td>
+</tr>
+<tr>
+<td>question.questionId</td>
 <td>string</td>
 <td>練習題目的 ID</td>
 </tr>
 <tr>
-<td>questionDetails[questionId].articleId</td>
+<td>question.articleId</td>
 <td>string</td>
 <td>練習文章的 ID</td>
 </tr>
 <tr>
-<td>questionDetails[questionId].voiceText</td>
+<td>question.voiceText</td>
 <td>string</td>
 <td>語音轉文字內容</td>
 </tr>
 <tr>
-<td>questionDetails[questionId].questionContent</td>
+<td>question.questionContent</td>
 <td>string</td>
 <td>練習題題目</td>
 </tr>
 <tr>
-<td>questionDetails[questionId].sk</td>
+<td>question.sk</td>
 <td>string</td>
 <td>練習題題目 sort key</td>
 </tr>
 <tr>
-<td>questionDetails[questionId].memo</td>
+<td>question.memo</td>
 <td>string</td>
 <td>練習題題目備註</td>
 </tr>
 <tr>
-<td>questionDetails[questionId].analyzedResult</td>
+<td>question.analyzedResult</td>
 <td>string</td>
 <td>AI 分析的結果</td>
+</tr>
+</tbody></table>
+<h2 id='download-voice-query'>Download Voice - Query</h2><div class="highlight"><pre class="highlight graphql tab-graphql"><code><span class="k">query</span><span class="w"> </span><span class="n">getDownloadVoiceSignedURL</span><span class="w"> </span><span class="p">{</span><span class="w">
+  </span><span class="n">getUploadVoiceSignedURL</span><span class="p">(</span><span class="w">
+    </span><span class="n">accountId</span><span class="p">:</span><span class="w"> </span><span class="s2">"test-accountId"</span><span class="w">
+    </span><span class="n">sk</span><span class="p">:</span><span class="w"> </span><span class="s2">"main:ARTICLE_SPEECH_PRACTICE:ts:1706243619"</span><span class="w">
+    </span><span class="n">articleId</span><span class="p">:</span><span class="w"> </span><span class="s2">"69"</span><span class="w">
+    </span><span class="n">articleIdQuestionId</span><span class="p">:</span><span class="w"> </span><span class="s2">"1"</span><span class="w">
+  </span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="n">error</span><span class="w">
+    </span><span class="n">message</span><span class="w">
+    </span><span class="n">signedUrl</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+<p>以上的 getUploadVoiceSignedURL query 會回傳以下 JSON:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"getUploadVoiceSignedURL"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"error"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"signedUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://dev-commerce-speech.s3.ap-southeast-1.amazonaws.com/ARTICLE_SPEECH_PRACTICE/test-accountId/1706243619/69/1.mp3?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=ASIAYQHUHCC4ZXLIT3FD%2F20240128%2Fap-southeast-1%2Fs3%2Faws4_request&amp;X-Amz-Date=20240128T060141Z&amp;X-Amz-Expires=60&amp;X-Amz-Security-Token=IQoJb3JpZ2luX2VjEBYaDmFwLXNvdXRoZWFzdC0xIkcwRQIgTPC59NGDjRZhbZ82TyoS30QoF0t4KIRvfkD5gmQlnJ8CIQDhfAgF6gywaEGYGtYnwXOCz39%2Bsj20Tp05zCx8rcRqyiqTAwjP%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F8BEAAaDDU4NDYyNzcyMDM3NyIMGnm34NCSgUUOwy3xKucCsF6Oo1HlYijF0PKRWyYS7xZtceRLp0dcfdnjv0g%2Fy8v9Y8M9XXLfCPqEncXiM8pB6za9ANhN55Srx6hSvonsME3ZKnR0UZauPoo4bw8UJIqhediLtH%2F98RWiCRWN7ljf727doxPuFAWddPE6BK7wKs8EKC5xDqH1JXN8%2BNlMueJOmFTjyhCnlaK%2FQZlhWQ5O8dIaWRB7u1o2LQzfJg4kA1JQJk3oGVvsXGixdbBUMoiOrAEdtK0laqfuGVYnlAlDY1j4Tbsml9gOLoKC5CtAqTsPWAP7P0Mv4WbuEmJfXrx40OCsAkPUZubk3urGp5z1lb%2Bc%2BGnpJBdcxjLPID6pri6zfn1%2BMqOOnSXq9i965fu3vrzAjIDVBh7kElNtL1fv9Xpfqld9ULZh6egzlP%2FJSOvM9vfsO5ismTGHqrvAATG3sBfYaJJ63Z6hMAnTW9uiy0kL60Jokn7ASVg4r202QUqi7hcOnuAwxNvXrQY6nQG3KE18vQX9I7Oj0kYoqwY9MGEnhejz5M%2FOVMxS9kD6alOfGHmsE8sFy%2FjmNIc4uIDXfx6GV00ziFsoHxEifzBkOsuyiFWoOf8AF2W6hx7R9S8hSrNBhDVkPkQjg3QIOr9IGxR9gv75dfgVH9GG5EH%2FZ2EszXa9RTeXPZOHrcYr3EghW6EljZT0DhbuoeFrPVwlV15Jd7NC%2FYalq2ff&amp;X-Amz-Signature=e421b7c7ce2829dc83254ead59d95cd8fb364338da30e1dc4a273b349c9dc9ce&amp;X-Amz-SignedHeaders=content-encoding%3Bhost&amp;x-id=PutObject"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+<p>以下是 ChatGPT 給的簡單的 Pseudo code，可以從 S3 下載 mp3 檔的 Signed URL</p>
+</blockquote>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="c1">// singedUrl from getDownloadVoiceSignedURL</span>
+<span class="kd">const</span> <span class="nx">signedUrl</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">SIGNED_URL</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="c1">// 獲取 audio 標籤</span>
+<span class="kd">const</span> <span class="nx">audioPlayer</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="dl">"</span><span class="s2">audioPlayer</span><span class="dl">"</span><span class="p">);</span>
+
+<span class="c1">// 定義異步函數來下載並播放音頻</span>
+<span class="k">async</span> <span class="kd">function</span> <span class="nx">downloadAndPlayAudio</span><span class="p">(</span><span class="nx">signedUrl</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">try</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">response</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">fetch</span><span class="p">(</span><span class="nx">signedUrl</span><span class="p">);</span> <span class="c1">// 使用 fetch 下載 MP3 文件</span>
+    <span class="kd">const</span> <span class="nx">blob</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">response</span><span class="p">.</span><span class="nx">blob</span><span class="p">();</span> <span class="c1">// 將響應轉換為 Blob</span>
+
+    <span class="c1">// 創建一個指向下載內容的 URL</span>
+    <span class="kd">const</span> <span class="nx">audioUrl</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">URL</span><span class="p">.</span><span class="nx">createObjectURL</span><span class="p">(</span><span class="nx">blob</span><span class="p">);</span>
+    <span class="nx">audioPlayer</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="nx">audioUrl</span><span class="p">;</span> <span class="c1">// 設置音頻源</span>
+    <span class="nx">audioPlayer</span><span class="p">.</span><span class="nx">play</span><span class="p">();</span> <span class="c1">// 播放音頻</span>
+  <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="dl">"</span><span class="s2">Error downloading or playing the audio:</span><span class="dl">"</span><span class="p">,</span> <span class="nx">error</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// 呼叫函數並傳入 Pre-Signed URL</span>
+<span class="nx">downloadAndPlayAudio</span><span class="p">(</span><span class="nx">signedUrl</span><span class="p">);</span>
+</code></pre></div>
+<p>下載 mp3 音檔有兩個步驟：</p>
+
+<ol>
+<li>呼叫 <code>getDownloadVoiceSignedURL</code> API 取得一次性的 Signed URL</li>
+<li>透過 Signed URL 直接從 S3 下載音檔 (不會透過大話 API)</li>
+</ol>
+<h3 id='query-input-parameters-4'>Query Input Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>accountId (required)</td>
+<td>string</td>
+<td>登入帳號 ID</td>
+</tr>
+<tr>
+<td>sk (required)</td>
+<td>string</td>
+<td>當前練習的 sort key</td>
+</tr>
+<tr>
+<td>articleId (required)</td>
+<td>string</td>
+<td>當前文章 ID</td>
+</tr>
+<tr>
+<td>articleIdQuestionId (required)</td>
+<td>string</td>
+<td>當前文章考題 ID</td>
+</tr>
+</tbody></table>
+<h3 id='response-9'>Response</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>signedUrl</td>
+<td>string</td>
+<td>下載音檔用的 Pre-Signed URL</td>
+</tr>
+<tr>
+<td>error</td>
+<td>boolean</td>
+<td>是否有 Error</td>
+</tr>
+<tr>
+<td>message</td>
+<td>string</td>
+<td>Error 訊息</td>
 </tr>
 </tbody></table>
 <h1 id='errors'>Errors</h1>
