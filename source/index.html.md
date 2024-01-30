@@ -929,3 +929,7 @@ downloadAndPlayAudio(signedUrl);
 | signedUrl | string  | 下載音檔用的 Pre-Signed URL |
 | error     | boolean | 是否有 Error                |
 | message   | string  | Error 訊息                  |
+
+## Edit Exam - Mutation
+
+跟分級測驗一樣
