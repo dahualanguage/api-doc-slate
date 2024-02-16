@@ -29,7 +29,7 @@ Dahua APIs，目前採用 [GraphQL](https://graphql.org/) 的技術，可以讓 
 
 ## 測試機(dev) endpoint:
 
-`https://bmxybfldb5bjdickj2z5gtm2ui.appsync-api.ap-southeast-1.amazonaws.com/graphql`
+`https://7ae6w54a45fhxfmxp7ejsora2m.appsync-api.us-west-2.amazonaws.com/graphql`
 
 ## 正式機(prod) endpoint:
 
