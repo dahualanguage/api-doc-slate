@@ -365,6 +365,12 @@
                     <a href="#upload-voice-query" class="toc-h2 toc-link" data-title="Upload Voice - Query">Upload Voice - Query</a>
                   </li>
                   <li>
+                    <a href="#update-voice-memo-mutation" class="toc-h2 toc-link" data-title="Update Voice Memo - Mutation">Update Voice Memo - Mutation</a>
+                  </li>
+                  <li>
+                    <a href="#get-voice-memo-query" class="toc-h2 toc-link" data-title="Get Voice Memo - Query">Get Voice Memo - Query</a>
+                  </li>
+                  <li>
                     <a href="#exams-query-2" class="toc-h2 toc-link" data-title="Exams - Query">Exams - Query</a>
                   </li>
                   <li>
@@ -1497,6 +1503,165 @@ API KEY 每一年需要更新一次 (找 Wilson 拿 API KEY.)
 <td>Error 訊息</td>
 </tr>
 </tbody></table>
+<h2 id='update-voice-memo-mutation'>Update Voice Memo - Mutation</h2><div class="highlight"><pre class="highlight graphql tab-graphql"><code><span class="k">mutation</span><span class="w"> </span><span class="n">updateVoiceMemo</span><span class="w"> </span><span class="p">{</span><span class="w">
+  </span><span class="n">updateVoiceMemo</span><span class="p">(</span><span class="w">
+    </span><span class="n">accountId</span><span class="p">:</span><span class="w"> </span><span class="s2">"test-accountId"</span><span class="w">
+    </span><span class="n">sk</span><span class="p">:</span><span class="w"> </span><span class="s2">"main:ARTICLE_SPEECH_PRACTICE:ts:1709267875"</span><span class="w">
+    </span><span class="n">articleId</span><span class="p">:</span><span class="w"> </span><span class="s2">"69"</span><span class="w">
+    </span><span class="n">articleIdQuestionId</span><span class="p">:</span><span class="w"> </span><span class="s2">"1"</span><span class="w">
+    </span><span class="n">memo</span><span class="p">:</span><span class="w"> </span><span class="s2">"This is my memo."</span><span class="w">
+  </span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="n">error</span><span class="w">
+    </span><span class="n">message</span><span class="w">
+    </span><span class="n">requestId</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+<p>以上的 updateVoiceMemo mutation 會回傳以下 JSON:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"updateVoiceMemo"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"error"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"message"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"66067a15-9178-45e8-bb08-460cde0e3d86"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div><h3 id='query-input-parameters-3'>Query Input Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>accountId (required)</td>
+<td>string</td>
+<td>登入帳號 ID</td>
+</tr>
+<tr>
+<td>sk (required)</td>
+<td>string</td>
+<td>當前練習的 sort key</td>
+</tr>
+<tr>
+<td>articleId (required)</td>
+<td>string</td>
+<td>當前文章 ID</td>
+</tr>
+<tr>
+<td>articleIdQuestionId (required)</td>
+<td>string</td>
+<td>當前文章考題 ID</td>
+</tr>
+<tr>
+<td>memo (required)</td>
+<td>string</td>
+<td>Memo</td>
+</tr>
+</tbody></table>
+<h3 id='response-8'>Response</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>error</td>
+<td>boolean</td>
+<td>是否有 Error</td>
+</tr>
+<tr>
+<td>message</td>
+<td>string</td>
+<td>Error 訊息</td>
+</tr>
+</tbody></table>
+<h2 id='get-voice-memo-query'>Get Voice Memo - Query</h2><div class="highlight"><pre class="highlight graphql tab-graphql"><code><span class="k">query</span><span class="w"> </span><span class="n">voiceMemo</span><span class="w"> </span><span class="p">{</span><span class="w">
+  </span><span class="n">voiceMemo</span><span class="p">(</span><span class="w">
+    </span><span class="n">accountId</span><span class="p">:</span><span class="w"> </span><span class="s2">"test-accountId"</span><span class="w">
+    </span><span class="n">sk</span><span class="p">:</span><span class="w"> </span><span class="s2">"main:ARTICLE_SPEECH_PRACTICE:ts:1709267875"</span><span class="w">
+    </span><span class="n">articleId</span><span class="p">:</span><span class="w"> </span><span class="s2">"69"</span><span class="w">
+    </span><span class="n">articleIdQuestionId</span><span class="p">:</span><span class="w"> </span><span class="s2">"1"</span><span class="w">
+  </span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="n">error</span><span class="w">
+    </span><span class="n">message</span><span class="w">
+    </span><span class="n">memo</span><span class="w">
+    </span><span class="n">requestId</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+<p>以上的 voiceMemo query 會回傳以下 JSON:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"voiceMemo"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"error"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"memo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"hello~~~~~~"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"409566b5-993f-4ab4-a3e1-14921168a5b0"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div><h3 id='query-input-parameters-4'>Query Input Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>accountId (required)</td>
+<td>string</td>
+<td>登入帳號 ID</td>
+</tr>
+<tr>
+<td>sk (required)</td>
+<td>string</td>
+<td>當前練習的 sort key</td>
+</tr>
+<tr>
+<td>articleId (required)</td>
+<td>string</td>
+<td>當前文章 ID</td>
+</tr>
+<tr>
+<td>articleIdQuestionId (required)</td>
+<td>string</td>
+<td>當前文章考題 ID</td>
+</tr>
+</tbody></table>
+<h3 id='response-9'>Response</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>error</td>
+<td>boolean</td>
+<td>是否有 Error</td>
+</tr>
+<tr>
+<td>message</td>
+<td>string</td>
+<td>Error 訊息</td>
+</tr>
+<tr>
+<td>memo</td>
+<td>string</td>
+<td>Memo</td>
+</tr>
+</tbody></table>
 <h2 id='exams-query-2'>Exams - Query</h2><div class="highlight"><pre class="highlight graphql tab-graphql"><code><span class="k">query</span><span class="w"> </span><span class="n">exams</span><span class="w"> </span><span class="p">{</span><span class="w">
   </span><span class="n">exams</span><span class="p">(</span><span class="w">
     </span><span class="n">accountId</span><span class="p">:</span><span class="w"> </span><span class="s2">"test-accountId"</span><span class="w">
@@ -1543,7 +1708,7 @@ API KEY 每一年需要更新一次 (找 Wilson 拿 API KEY.)
 </ol>
 
 <p>比較推薦的做法是，可以先不傳 withDetails(預設為 false)，並且拿到學生的多個測驗歷史後，在讓學生點選某一個測驗，這時候在把 withDetails 設定為 true 並且傳(accountId + sk(學生選中的 sk))給 Exam API，這時 Exam API 就會把所有測驗細節回傳給學生。</p>
-<h3 id='query-input-parameters-3'>Query Input Parameters</h3>
+<h3 id='query-input-parameters-5'>Query Input Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -1572,7 +1737,7 @@ API KEY 每一年需要更新一次 (找 Wilson 拿 API KEY.)
 <td>是否回傳學生的答案 + AI 分析結果</td>
 </tr>
 </tbody></table>
-<h3 id='response-8'>Response</h3>
+<h3 id='response-10'>Response</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -1720,7 +1885,7 @@ API KEY 每一年需要更新一次 (找 Wilson 拿 API KEY.)
 <li>呼叫 <code>getDownloadVoiceSignedURL</code> API 取得一次性的 Signed URL</li>
 <li>透過 Signed URL 直接從 S3 下載音檔 (不會透過大話 API)</li>
 </ol>
-<h3 id='query-input-parameters-4'>Query Input Parameters</h3>
+<h3 id='query-input-parameters-6'>Query Input Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -1749,7 +1914,7 @@ API KEY 每一年需要更新一次 (找 Wilson 拿 API KEY.)
 <td>當前文章考題 ID</td>
 </tr>
 </tbody></table>
-<h3 id='response-9'>Response</h3>
+<h3 id='response-11'>Response</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
