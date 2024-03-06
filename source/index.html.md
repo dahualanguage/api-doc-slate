@@ -769,6 +769,105 @@ document.getElementById("uploadButton").addEventListener("click", function () {
 | error     | boolean | 是否有 Error                |
 | message   | string  | Error 訊息                  |
 
+## Update Voice Memo - Mutation
+
+```graphql
+mutation updateVoiceMemo {
+  updateVoiceMemo(
+    accountId: "test-accountId"
+    sk: "main:ARTICLE_SPEECH_PRACTICE:ts:1709267875"
+    articleId: "69"
+    articleIdQuestionId: "1"
+    memo: "This is my memo."
+  ) {
+    error
+    message
+    requestId
+  }
+}
+```
+
+> 以上的 updateVoiceMemo mutation 會回傳以下 JSON:
+
+```json
+{
+  "data": {
+    "updateVoiceMemo": {
+      "error": false,
+      "message": null,
+      "requestId": "66067a15-9178-45e8-bb08-460cde0e3d86"
+    }
+  }
+}
+```
+
+### Query Input Parameters
+
+| Parameter                      | type   | Description         |
+| ------------------------------ | ------ | ------------------- |
+| accountId (required)           | string | 登入帳號 ID         |
+| sk (required)                  | string | 當前練習的 sort key |
+| articleId (required)           | string | 當前文章 ID         |
+| articleIdQuestionId (required) | string | 當前文章考題 ID     |
+| memo (required)                | string | Memo                |
+
+### Response
+
+| Parameter | type    | Description  |
+| --------- | ------- | ------------ |
+| error     | boolean | 是否有 Error |
+| message   | string  | Error 訊息   |
+
+## Get Voice Memo - Query
+
+```graphql
+query voiceMemo {
+  voiceMemo(
+    accountId: "test-accountId"
+    sk: "main:ARTICLE_SPEECH_PRACTICE:ts:1709267875"
+    articleId: "69"
+    articleIdQuestionId: "1"
+  ) {
+    error
+    message
+    memo
+    requestId
+  }
+}
+```
+
+> 以上的 voiceMemo query 會回傳以下 JSON:
+
+```json
+{
+  "data": {
+    "voiceMemo": {
+      "error": false,
+      "message": "",
+      "memo": "hello~~~~~~",
+      "requestId": "409566b5-993f-4ab4-a3e1-14921168a5b0"
+    }
+  }
+}
+```
+
+### Query Input Parameters
+
+| Parameter                      | type   | Description         |
+| ------------------------------ | ------ | ------------------- |
+| accountId (required)           | string | 登入帳號 ID         |
+| sk (required)                  | string | 當前練習的 sort key |
+| articleId (required)           | string | 當前文章 ID         |
+| articleIdQuestionId (required) | string | 當前文章考題 ID     |
+
+### Response
+
+| Parameter | type    | Description  |
+| --------- | ------- | ------------ |
+| error     | boolean | 是否有 Error |
+| message   | string  | Error 訊息   |
+| memo      | string  | Memo         |
+
 ## Exams - Query
 
 ```graphql
