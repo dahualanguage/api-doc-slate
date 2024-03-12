@@ -584,6 +584,7 @@ mutation startExam {
         }
       ]
     }
+    isTW: true
   ) {
     error
     message
@@ -627,19 +628,20 @@ startExam mutation 會開啟一個文章口語練習，一個學生可以有多�
 
 ### Mutation Input Parameters
 
-| Parameter                           | type   | Description                                                    |
-| ----------------------------------- | ------ | -------------------------------------------------------------- |
-| accountId (required)                | string | 登入帳號 ID                                                    |
-| examType (required)                 | enum   | 考試種類(目前只有`DETERMINE_LEVEL`跟`ARTICLE_SPEECH_PRACTICE`) |
-| article (required)                  | object | 文章內容(包含題目)                                             |
-| article.articleId (required)        | string | 文章的 ID                                                      |
-| article.levelId (required)          | string | 文章的分級                                                     |
-| article.articleContent (required)   | string | 文章內容                                                       |
-| article.questions (required)        | array  | 考題(question) Array                                           |
-| question (required)                 | object | 考題(question)                                                 |
-| question.questionId (required)      | string | 考題的 ID                                                      |
-| question.questionContent (required) | string | 題目內容                                                       |
-| question.description (optional)     | string | 考題的解釋                                                     |
+| Parameter                           | type    | Description                                                    |
+| ----------------------------------- | ------- | -------------------------------------------------------------- |
+| accountId (required)                | string  | 登入帳號 ID                                                    |
+| examType (required)                 | enum    | 考試種類(目前只有`DETERMINE_LEVEL`跟`ARTICLE_SPEECH_PRACTICE`) |
+| isTW (optional)                     | boolean | 預設為 true(回傳繁體中文)，false 回傳簡體中文                  |
+| article (required)                  | object  | 文章內容(包含題目)                                             |
+| article.articleId (required)        | string  | 文章的 ID                                                      |
+| article.levelId (required)          | string  | 文章的分級                                                     |
+| article.articleContent (required)   | string  | 文章內容                                                       |
+| article.questions (required)        | array   | 考題(question) Array                                           |
+| question (required)                 | object  | 考題(question)                                                 |
+| question.questionId (required)      | string  | 考題的 ID                                                      |
+| question.questionContent (required) | string  | 題目內容                                                       |
+| question.description (optional)     | string  | 考題的解釋                                                     |
 
 <aside class="success">
 注意 — examType 是 GraphQL enum type
