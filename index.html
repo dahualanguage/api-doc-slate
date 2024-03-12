@@ -1210,6 +1210,7 @@ API KEY 每一年需要更新一次 (找 Wilson 拿 API KEY.)
         </span><span class="p">}</span><span class="w">
       </span><span class="p">]</span><span class="w">
     </span><span class="p">}</span><span class="w">
+    </span><span class="n">isTW</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
   </span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
     </span><span class="n">error</span><span class="w">
     </span><span class="n">message</span><span class="w">
@@ -1265,6 +1266,11 @@ API KEY 每一年需要更新一次 (找 Wilson 拿 API KEY.)
 <td>examType (required)</td>
 <td>enum</td>
 <td>考試種類(目前只有<code>DETERMINE_LEVEL</code>跟<code>ARTICLE_SPEECH_PRACTICE</code>)</td>
+</tr>
+<tr>
+<td>isTW (optional)</td>
+<td>boolean</td>
+<td>預設為 true(回傳繁體中文)，false 回傳簡體中文</td>
 </tr>
 <tr>
 <td>article (required)</td>
