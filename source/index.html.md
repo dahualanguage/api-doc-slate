@@ -184,6 +184,7 @@ startExam mutation 會開啟一個新的考試，一個學生可以有多個考�
 | Parameter            | type   | Description                                                    |
 | -------------------- | ------ | -------------------------------------------------------------- |
 | accountId (required) | string | 登入帳號 ID                                                    |
+| email (optional)     | string | 登入帳號 Email                                                 |
 | examType (required)  | enum   | 考試種類(目前只有`DETERMINE_LEVEL`跟`ARTICLE_SPEECH_PRACTICE`) |
 
 <aside class="success">
@@ -631,6 +632,7 @@ startExam mutation 會開啟一個文章口語練習，一個學生可以有多�
 | Parameter                           | type    | Description                                                    |
 | ----------------------------------- | ------- | -------------------------------------------------------------- |
 | accountId (required)                | string  | 登入帳號 ID                                                    |
+| email (optional)                    | string  | 登入帳號 Email                                                 |
 | examType (required)                 | enum    | 考試種類(目前只有`DETERMINE_LEVEL`跟`ARTICLE_SPEECH_PRACTICE`) |
 | isTW (optional)                     | boolean | 預設為 true(回傳繁體中文)，false 回傳簡體中文                  |
 | article (required)                  | object  | 文章內容(包含題目)                                             |
